@@ -1,7 +1,7 @@
 const express = require('express');
 const roomController = require('./controllers/RoomController');
 const studentController = require('./controllers/StudentController');
-const authController = require('./controllers/AuthController');
+const { authController } = require('./controllers/AuthController');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 

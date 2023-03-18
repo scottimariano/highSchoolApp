@@ -8,6 +8,25 @@ function generateAccessToken(param){
     return jwt.sign(param, TOKEN_SECRET);
 }
 
+function authenticateToken(req, res){
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+ 
+    if(token == null){
+      return res.sendStatus(401);
+    }
+ 
+    jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
+
+        if(err){
+            return res.sendStatus(403);
+        }
+
+        console.log(user + " VALIDADO!!")
+
+    })
+}
+
 authController.post('/', (req, res) => {
     const { username, password } = req.body;
 
@@ -21,4 +40,4 @@ authController.post('/', (req, res) => {
     res.json(token);
 });
 
-module.exports = authController;
+module.exports = {authController, authenticateToken};

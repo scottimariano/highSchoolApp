@@ -1,12 +1,18 @@
 const server = require('../app.js');
 const Router = require('express');
-const { Room, Student } = require('../db');
+const { Student } = require('../db');
 
 const studentController = Router();
 
 studentController.get('/', async (req, res) => {
-    const studentList = await Student.findAll();
-	res.send(studentList)
+    Student.findAll()
+    .then((studentList)=>{
+        return res.send(studentList)
+    })
+    .catch(e => {
+        console.log(e);
+        res.status(500).send('Error retrieving students');
+    });
 });
 
 studentController.post('/', async (req, res) => {
