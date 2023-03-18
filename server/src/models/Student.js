@@ -20,6 +20,10 @@ module.exports = (sequelize) => {
 			age: {
 				type: DataTypes.INTEGER,
 				allowNull: false
+			},
+			profileImageUrl: {
+				type: DataTypes.STRING,
+				allowNull: false
 			}
         },
         { timestamps: false }

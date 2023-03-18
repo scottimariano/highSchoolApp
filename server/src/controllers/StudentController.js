@@ -16,13 +16,14 @@ studentController.get('/', async (req, res) => {
 });
 
 studentController.post('/', async (req, res) => {
-    let {name, lastName, age, roomId} =req.body
+    let {name, lastName, age, roomId, profileImageUrl} =req.body
     
     Student.create({
         name,
         lastName,
         age,
-        RoomId: roomId
+        RoomId: roomId,
+        profileImageUrl
     })
     .then(newStudent => {
         return res.status(201).json(newStudent);
@@ -36,7 +37,7 @@ studentController.post('/', async (req, res) => {
 studentController.put('/:id', async (req, res) => {
 
     const { id } = req.params;
-    let {name, lastName, age, roomId} = req.body;
+    let {name, lastName, age, roomId, profileImageUrl} = req.body;
 
     Student.findByPk(id)
     .then((record) => {
@@ -45,7 +46,8 @@ studentController.put('/:id', async (req, res) => {
                 name,
                 lastName,
                 age,
-                RoomId: roomId
+                RoomId: roomId,
+                profileImageUrl
             }
         )
         .then((updatedRecord)=> {
