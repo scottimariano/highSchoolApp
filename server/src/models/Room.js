@@ -9,15 +9,14 @@ module.exports = (sequelize) => {
 				primaryKey: true,
 				autoIncrement: true
 			},
-			Name: {
+			name: {
 				type: DataTypes.STRING,
 				allowNull: true
 			},
-			Teacher: {
+			teacher: {
 				type: DataTypes.STRING,
 				allowNull: true
-			},
-            
+			}
         },
         { timestamps: false }
     );
