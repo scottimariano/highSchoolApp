@@ -23,7 +23,7 @@ const { conn } = require('./src/db.js');
 const { PORT, DB_RESET } = process.env;
 
 let dbReset = DB_RESET === "true" ? true : false
-console.log(dbReset);
+
 // Syncing all the models at once.
 conn.sync({ force: dbReset }).then(() => {
 	server.listen(PORT, () => {
