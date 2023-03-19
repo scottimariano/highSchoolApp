@@ -1,11 +1,51 @@
 const server = require('../app.js');
 const Router = require('express');
-const { Student } = require('../db');
+const { Student, Sibling } = require('../db');
 
 const studentController = Router();
 
+studentController.get('/:id', async (req, res) => {
+
+    const { id } = req.params;
+
+    Student.findOne({
+        where: { id },
+        include: [
+            {
+                model: Student,
+                as: 'siblings',
+                through: 'Sibling',
+                attributes: ['id', 'name'],
+                through: {
+                    attributes: []
+                }
+            }
+        ]
+    })
+    .then((studentList)=>{
+        return res.status(200).json(studentList);
+    })
+    .catch(err => {
+        console.log(err);
+        return res.status(500).send('Error retrieving student');
+    });
+});
+
 studentController.get('/', async (req, res) => {
-    Student.findAll()
+    Student.findAll({
+        include: [
+            {
+                model: Student,
+                as: 'siblings',
+                through: 'Sibling',
+                attributes: ['id', 'name'],
+                through: {
+                    attributes: []
+                }
+            }
+        ],
+        order: [['id', 'ASC']]
+    })
     .then((studentList)=>{
         return res.status(200).json(studentList);
     })
@@ -16,7 +56,7 @@ studentController.get('/', async (req, res) => {
 });
 
 studentController.post('/', async (req, res) => {
-    let {name, lastName, age, roomId, profileImageUrl} =req.body
+    let {name, lastName, age, roomId, profileImageUrl, siblingsIds} =req.body
     
     Student.create({
         name,
@@ -26,6 +66,18 @@ studentController.post('/', async (req, res) => {
         profileImageUrl
     })
     .then(newStudent => {
+        if (siblingsIds.length > 0) {
+            siblingsIds.forEach(id => {
+                Student.findByPk(id)
+                .then(student => {
+                    newStudent.addSibling(student)
+                })
+                .catch(err => {
+                    console.error(err);
+                    return res.status(500).json({ message: 'Error associating sibling' });
+                })
+            });
+        } 
         return res.status(201).json(newStudent);
     })
     .catch(err => {
@@ -37,21 +89,34 @@ studentController.post('/', async (req, res) => {
 studentController.put('/:id', async (req, res) => {
 
     const { id } = req.params;
-    let {name, lastName, age, roomId, profileImageUrl} = req.body;
+    let {name, lastName, age, roomId, profileImageUrl, siblingsIds} = req.body;
 
     Student.findByPk(id)
-    .then((record) => {
-        record.update(
+    .then((student) => {
+        student.update(
             {
                 name,
                 lastName,
                 age,
                 RoomId: roomId,
-                profileImageUrl
+                profileImageUrl,
+                siblingsIds
             }
         )
-        .then((updatedRecord)=> {
-            return res.status(200).json(updatedRecord);
+        .then(updatedStudent => {
+            if (siblingsIds.length > 0) {
+                siblingsIds.forEach(id => {
+                    Student.findByPk(id)
+                    .then(student => {
+                        updatedStudent.addSibling(student)
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        return res.status(500).json({ message: 'Error associating sibling' });
+                    })
+                });
+            } 
+            return res.status(200).json(updatedStudent);
         })
         .catch((err)=>{
             console.error(err);

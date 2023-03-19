@@ -4,6 +4,36 @@ const { Room, Student } = require('../db');
 
 const roomController = Router();
 
+roomController.get('/:id', async (req, res) => {
+
+    const { id } = req.params;
+
+    Room.findOne({
+        where: { id },
+        include: [{
+            model: Student,
+            attributes: []
+        }],
+        attributes: {
+            include: [
+                [
+                    Sequelize.fn('COUNT', Sequelize.col('Students.id')),
+                    'attendees'
+                ]
+            ]
+        },
+        group: "Room.id"
+        
+    })
+    .then((room)=>{
+        return res.send(room)
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).send('Error retrieving room');
+    });
+});
+
 roomController.get('/', async (req, res) => {
 
     const nameFilter = req.query.name ? req.query.name : ''
