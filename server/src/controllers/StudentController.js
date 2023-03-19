@@ -56,12 +56,13 @@ studentController.get('/', async (req, res) => {
 });
 
 studentController.post('/', async (req, res) => {
-    let {name, lastName, age, roomId, profileImageUrl, siblingsIds} =req.body
+    let {name, lastName, age, gender,roomId, profileImageUrl, siblingsIds} =req.body
     
     Student.create({
         name,
         lastName,
         age,
+        gender,
         RoomId: roomId,
         profileImageUrl
     })
@@ -77,7 +78,7 @@ studentController.post('/', async (req, res) => {
                     return res.status(500).json({ message: 'Error associating sibling' });
                 })
             });
-        } 
+        }
         return res.status(201).json(newStudent);
     })
     .catch(err => {
@@ -89,7 +90,7 @@ studentController.post('/', async (req, res) => {
 studentController.put('/:id', async (req, res) => {
 
     const { id } = req.params;
-    let {name, lastName, age, roomId, profileImageUrl, siblingsIds} = req.body;
+    let {name, lastName, age, gender, roomId, profileImageUrl, siblingsIds} = req.body;
 
     Student.findByPk(id)
     .then((student) => {
@@ -98,6 +99,7 @@ studentController.put('/:id', async (req, res) => {
                 name,
                 lastName,
                 age,
+                gender,
                 RoomId: roomId,
                 profileImageUrl,
                 siblingsIds

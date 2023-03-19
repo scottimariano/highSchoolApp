@@ -21,9 +21,13 @@ module.exports = (sequelize) => {
 				type: DataTypes.INTEGER,
 				allowNull: false
 			},
-			profileImageUrl: {
+			gender: {
 				type: DataTypes.STRING,
 				allowNull: false
+			},
+			profileImageUrl: {
+				type: DataTypes.STRING,
+				allowNull: true
 			}
         },
         { timestamps: false }
