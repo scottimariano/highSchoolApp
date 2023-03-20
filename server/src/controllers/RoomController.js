@@ -12,7 +12,7 @@ roomController.get('/:id', async (req, res) => {
         where: { id },
         include: [{
             model: Student,
-            attributes: []
+            attributes: ['id', 'name', 'lastName', 'profileImageUrl']
         }],
         attributes: {
             include: [
@@ -22,7 +22,7 @@ roomController.get('/:id', async (req, res) => {
                 ]
             ]
         },
-        group: "Room.id"
+        group: ["Room.id","Students.id"]
         
     })
     .then((room)=>{

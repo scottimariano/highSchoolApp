@@ -1,6 +1,6 @@
 const server = require('../app.js');
 const Router = require('express');
-const { Student, Sibling } = require('../db');
+const { Student, Room} = require('../db');
 
 const studentController = Router();
 
@@ -19,6 +19,10 @@ studentController.get('/:id', async (req, res) => {
                 through: {
                     attributes: []
                 }
+            },
+            {
+                model: Room,
+                attributes: ['id', 'name']
             }
         ]
     })
