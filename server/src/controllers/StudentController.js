@@ -10,6 +10,7 @@ studentController.get('/:id', async (req, res) => {
 
     Student.findOne({
         where: { id },
+        attributes: ['id', 'name', 'lastName', 'age', 'gender', 'profileImageUrl'],
         include: [
             {
                 model: Student,
@@ -76,6 +77,7 @@ studentController.post('/', async (req, res) => {
                 Student.findByPk(id)
                 .then(student => {
                     newStudent.addSibling(student)
+                    student.addSibling(newStudent)
                 })
                 .catch(err => {
                     console.error(err);
@@ -110,7 +112,7 @@ studentController.put('/:id', async (req, res) => {
             }
         )
         .then(updatedStudent => {
-            if (siblingsIds.length > 0) {
+            if (siblingsIds && siblingsIds.length > 0) {
                 siblingsIds.forEach(id => {
                     Student.findByPk(id)
                     .then(student => {
