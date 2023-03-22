@@ -12,18 +12,17 @@ roomController.get('/:id', async (req, res) => {
         where: { id },
         include: [{
             model: Student,
+            where: { 'RoomId': id },
             attributes: ['id', 'name', 'lastName', 'profileImageUrl']
         }],
         attributes: {
             include: [
                 [
-                    Sequelize.fn('COUNT', Sequelize.col('Students.id')),
+                    Sequelize.literal('(SELECT COUNT(*) FROM "Students" WHERE "Students"."RoomId" = "Room"."id")'),
                     'attendees'
                 ]
             ]
-        },
-        group: ["Room.id","Students.id"]
-        
+        }
     })
     .then((room)=>{
         return res.send(room)
