@@ -1,11 +1,20 @@
 import '../styles/globals.css'
 import "@fortawesome/fontawesome-svg-core/styles.css"; // import Font Awesome CSS
 import { config } from "@fortawesome/fontawesome-svg-core";
+import React from 'react';
+import { UserProvider } from '@auth0/nextjs-auth0/client';
+import Layout from '../components/layout/Layout';
 config.autoAddCss = false; // Tell Font Awesome to skip adding the CSS automatically since it's being imported above
 
 
 function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+  return (
+    <UserProvider>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
+    </UserProvider>
+  ) 
 }
 
 export default MyApp

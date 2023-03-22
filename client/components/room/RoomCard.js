@@ -4,6 +4,7 @@ import { faPeopleGroup } from "@fortawesome/free-solid-svg-icons"; //
 import styles from '../../styles/RoomCard.module.css';
 
 
+
 export default function RoomCard({room}) {
   return (
     <div className={styles.container}>

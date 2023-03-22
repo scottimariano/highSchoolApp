@@ -6,39 +6,40 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons"; //
 import { useUser } from '@auth0/nextjs-auth0/client';
 import Link from 'next/link';
+import StudentCard from '../components/student/StudentCard';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-const Home = () => {
-	const [rooms, setRooms] = useState([]);
+const Students = () => {
+	const [students, setStudents] = useState([]);
 	const [input, setInput] = useState([]);
-	const [filteredRooms, setFilteredRooms] = useState([]);
+	const [filteredStudents, setFilteredstudents] = useState([]);
 	const { user, error, isLoading } = useUser();
 
-	const getRooms = async ()=>{
+	const getStudents = async ()=>{
 		console.log(API_URL)
-		const res = await fetch(`${API_URL}/rooms`);
+		const res = await fetch(`${API_URL}/students`);
 		const data = await res.json();
 		console.log(data)
-		setRooms(data);
+		setStudents(data);
 	}
 
 	useEffect(() => {
-		getRooms();
+		getStudents();
 	}, []);
 	
 	useEffect(() => {
-		setFilteredRooms(rooms)
-	}, [rooms]);
+		setFilteredstudents(students)
+	}, [students]);
 
 
 	function handleSearh(input){
-		setFilteredRooms(rooms.filter(room => room.name.includes(input)))
+		setFilteredstudents(student.filter(student => student.name.includes(input) || student.lastName.includes(input)))
 		setInput('');
 	}
 
 	function handleClearSearch(){
-		setFilteredRooms(rooms)
+		setFilteredstudents(students)
 	}
 
 	return (
@@ -47,7 +48,7 @@ const Home = () => {
 				<title>RatherLab Dev School</title>
 			</Head>
 			<div>
-				<input type="text" placeholder='Search room by name' value={input} onChange={(e) => setInput(e.target.value)}/>
+				<input type="text" placeholder='Search Student by name or last name' value={input} onChange={(e) => setInput(e.target.value)}/>
 				<button onClick={()=>handleSearh(input)}>
 					<FontAwesomeIcon style={{fontSize:"25px"}} icon={faSearch}></FontAwesomeIcon>
 				</button>
@@ -60,9 +61,9 @@ const Home = () => {
                 <Link href={`/students/create`}> CREATE STUDENT </Link>
 			</div>
 			<ul>
-				{filteredRooms.map((room) => (
-					<li key={room.id}>
-						<RoomCard room={room} />
+				{filteredStudents.map((student) => (
+					<li key={student.id}>
+						<StudentCard student={student} />
 					</li>
 				))}
 			</ul>
@@ -70,4 +71,4 @@ const Home = () => {
 		);
 };
 
-export default Home;
+export default Students;
