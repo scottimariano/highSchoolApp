@@ -9,6 +9,7 @@ export default function RoomPage(room){
 }
 
 export async function getServerSideProps(context) {
+    
     const { id } = context.params;
     const res = await fetch(`${API_URL}/rooms/${id}`)
     const data = await res.json()

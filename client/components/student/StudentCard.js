@@ -7,20 +7,20 @@ import Router from 'next/router'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
-export default function StudentCard({student}) {
+export default function StudentCard({student, editMode, handleDismiss}) {
   const { user, error, isLoading } = useUser();
   
-  async function handleDismiss(id){
-    let bodyContent = {roomId: null}
-    const res = await fetch(`${API_URL}/students/${id}`,{
-      method : 'PUT',
-      body: JSON.stringify(bodyContent),
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    })
-    Router.reload(window.location.pathname)
-  }
+  // async function handleDismiss(id){
+  //   let bodyContent = {roomId: null}
+  //   const res = await fetch(`${API_URL}/students/${id}`,{
+  //     method : 'PUT',
+  //     body: JSON.stringify(bodyContent),
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     }
+  //   })
+  //   Router.reload(window.location.pathname)
+  // }
 
   return (
     <div>
@@ -32,7 +32,7 @@ export default function StudentCard({student}) {
 				className={utilStyles.thumbnail}>
 			</img>
       	</Link>
-      	{user ? 
+      	{user && editMode ? 
 			<button onClick={()=>handleDismiss(student.id)}>
 			Dismiss <FontAwesomeIcon style={{fontSize:"25px"}} icon={faArrowRightFromBracket}></FontAwesomeIcon> 
 			</button>

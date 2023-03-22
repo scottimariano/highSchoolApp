@@ -124,7 +124,6 @@ export default function CreateStudent() {
 
 	}
 
-
 	function handleSubmit(e) {
 		e.preventDefault();
 		let data = input;
