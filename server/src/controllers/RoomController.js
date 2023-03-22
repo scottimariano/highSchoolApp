@@ -25,6 +25,9 @@ roomController.get('/:id', async (req, res) => {
         }
     })
     .then((room)=>{
+        if(!room){
+            return res.status(404).send('Room Not Found');
+        }
         return res.send(room)
     })
     .catch(err => {

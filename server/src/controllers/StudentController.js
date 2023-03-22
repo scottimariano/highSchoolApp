@@ -107,8 +107,7 @@ studentController.put('/:id', async (req, res) => {
                 age,
                 gender,
                 RoomId: roomId,
-                profileImageUrl,
-                siblingsIds
+                profileImageUrl
             }
         )
         .then(updatedStudent => {
