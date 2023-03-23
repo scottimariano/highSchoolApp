@@ -1,7 +1,6 @@
 const express = require('express');
 const roomController = require('./controllers/RoomController');
 const studentController = require('./controllers/StudentController');
-const { authController } = require('./controllers/AuthController');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
@@ -21,7 +20,6 @@ server.use((req, res, next) => {
 	);
 	next();
 });
-server.use('/login', authController)
 server.use('/rooms', roomController)
 server.use('/students', studentController)
 

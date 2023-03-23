@@ -12,8 +12,11 @@ export default function StudentDetail({student}) {
             <p>SURNAME: {student.data.lastName}</p>
             <p>GENDER: {student.data.gender}</p>
             <p>AGE: {student.data.age}</p>
-            <p>ROOM: <Link href={`/rooms/${student.data.Room.id}`}>{student.data.Room.name}</Link></p>
-            {!student.data.siblings.length > 0 ? <></> :
+            {student.data.Room ? <p>ROOM: <Link href={`/rooms/${student.data.Room.id}`}>{student.data.Room.name}</Link></p>
+            :
+            <p>No courses associated</p>
+            }
+            {!student.data.siblings.length > 0 ? <p>No relatives</p> :
             <>
                 <p>Hermanos:</p>
                 <ul>
