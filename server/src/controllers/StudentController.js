@@ -63,6 +63,16 @@ studentController.get('/', async (req, res) => {
 studentController.post('/', async (req, res) => {
     let {name, lastName, age, gender,roomId, profileImageUrl, siblingsIds} =req.body
     
+    if(!profileImageUrl){
+        if (gender === 'male') {
+            profileImageUrl = "https://res.cloudinary.com/dmwfysfrn/image/upload/v1679594349/ratherLab/profileImages/ppn3gxsnyzjvjj0q8fof.png";
+        } else if (gender === 'female') {
+            profileImageUrl = "https://res.cloudinary.com/dmwfysfrn/image/upload/v1679594304/ratherLab/profileImages/gmqyqh9te6st3yo4pbag.png";
+        } else {
+            profileImageUrl = ""
+        }
+    }
+
     Student.create({
         name,
         lastName,

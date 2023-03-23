@@ -13,7 +13,8 @@ roomController.get('/:id', async (req, res) => {
         include: [{
             model: Student,
             where: { 'RoomId': id },
-            attributes: ['id', 'name', 'lastName', 'profileImageUrl']
+            attributes: ['id', 'name', 'lastName', 'profileImageUrl'],
+            required: false
         }],
         attributes: {
             include: [
@@ -106,7 +107,7 @@ roomController.put('/:id', async (req, res) => {
         })
         .catch((err)=>{
             console.error(err);
-            return res.status(500).json({ message: 'Error creating room' });
+            return res.status(500).json({ message: 'Error editing room' });
         })
     })
     .catch((err) => {
