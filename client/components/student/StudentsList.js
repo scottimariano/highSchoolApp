@@ -1,48 +1,42 @@
 import Head from 'next/head';
+import StudentCard from "../student/StudentCard"
 import { useState, useEffect } from "react";
-import RoomCard from "../../components/room/RoomCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import Styles from "../../styles/StudentsHome.module.css"
+import Styles from "../../styles/Home.module.css"
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-const Home = () => {
-	const [rooms, setRooms] = useState([]);
-	const [filteredRooms, setFilteredRooms] = useState([]);
-	const [toogleSort, changeToogleSort] = useState(true)
-
-	const getRooms = async ()=>{
-		const res = await fetch(`${API_URL}/rooms`);
-		const data = await res.json();
-		setRooms(data);
-	}
+export default function StudentsList ({list}) {
+	const [students, setStudents] = useState([]);
+	const [filteredStudents, setFilteredstudents] = useState([]);
+    const [toogleSort, changeToogleSort] = useState(true)
 
 	useEffect(() => {
-		getRooms();
+        setStudents(list.data);
 	}, []);
 	
 	useEffect(() => {
-		setFilteredRooms(rooms)
-	}, [rooms]);
-
+		setFilteredstudents(students)
+	}, [students]);
 
 	function handleSearh(e){
-		let searchTerm = e.target.value
-		setFilteredRooms(rooms.filter(room => {
-			let roomName = room.name.toLowerCase();
-			return roomName.includes(searchTerm.toLowerCase())
+		let searchTerm = e.target.value.toLowerCase()
+		setFilteredstudents(students.filter(student => {
+			let name = student.name.toLowerCase();
+			let lastName = student.lastName.toLowerCase();
+			return (name.includes(searchTerm) || lastName.includes(searchTerm))
 		}))
 	}
 
 	function handleClearSearch(){
-		setFilteredRooms(rooms)
+		setFilteredstudents(students)
 	}
 
-	function handleSort(){
-        const sorted = [...filteredRooms].sort((a, b) => {
-            const nameA = a.name.toLowerCase() + a.teacher.toLowerCase();
-            const nameB = b.name.toLowerCase() + b.teacher.toLowerCase();
+    function handleSort(){
+        const sorted = [...filteredStudents].sort((a, b) => {
+            const nameA = a.lastName.toLowerCase() + a.name.toLowerCase();
+            const nameB = b.lastName.toLowerCase() + b.name.toLowerCase();
             if (nameA < nameB) {
               return toogleSort === true ? -1 : 1;
             }
@@ -51,14 +45,14 @@ const Home = () => {
             }
             return 0;
           });
-          setFilteredRooms(sorted);
+          setFilteredstudents(sorted);
           changeToogleSort(!toogleSort);
     }
 
 	return (
 		<div>
 			<Head>
-				<title> Home page - RatherLab School </title>
+				<title> Students - RatherLab School </title>
 			</Head>
 			<div className={Styles.searchTag}>
 				<FontAwesomeIcon style={{fontSize:"25px"}} icon={faSearch}></FontAwesomeIcon>
@@ -72,14 +66,12 @@ const Home = () => {
 				</button>
 			</div>
 			<ul className={Styles.roomList}>
-				{filteredRooms.map((room) => (
-					<li key={room.id}>
-						<RoomCard room={room} />
+                {filteredStudents.map((student) => (
+					<li key={student.id}>
+						<StudentCard student={student} />
 					</li>
 				))}
 			</ul>
 		</div>
 		);
 };
-
-export default Home;

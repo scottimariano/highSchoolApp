@@ -2,13 +2,23 @@
   width: 100vw;
   display: flex;
   flex-flow: row wrap;
-  justify-content:space-evenly;
-  padding: 0 20px 0 20px;
+  justify-content:center;
 }
 
 .roomList li{
-  width: 600px;
+  width: 500px;
   margin: 10px;
-  background-color: #fff;
-  height: 100px;
+}
+
+.searchTag{
+  border-radius: 10px;
+  width: 270px;
+  display: flex;
+  justify-content: space-around;
+  height: 30px;
+  margin: 10px 0 0 10px;
+}
+
+.searchTag button{
+  font-size: 12px;
 }

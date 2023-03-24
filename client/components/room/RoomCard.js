@@ -6,17 +6,21 @@ import styles from '../../styles/RoomCard.module.css';
 
 
 export default function RoomCard({room}) {
+
+    let attendees = room.attendees > 1 ? "attendee" : "attendees" 
+
     return (
-        <div className={styles.container}>
-            <Link  href={`/rooms/${room.id}`}>
-                <h2>Name: {room.name}</h2>
-                <p>Techer: {room.teacher}</p>
-                <div>
-                <p>{room.attendees}</p>
-                <span> attendees</span>
-                <FontAwesomeIcon style={{fontSize:"25px"}} icon={faPeopleGroup}></FontAwesomeIcon>
-                </div>
-            </Link>
-        </div>
+        <Link  href={`/rooms/${room.id}`}>
+            <div className={styles.container}>
+                    <p className={styles.title}>Name: <strong>{room.name}</strong></p>
+                    <div className={styles.data}>
+                        <p className={styles.teacher}>Teacher: {room.teacher}</p>
+                        <div className={styles.attendees}>
+                            <FontAwesomeIcon style={{fontSize:"25px", color:"#21248b"}} icon={faPeopleGroup}></FontAwesomeIcon>
+                            <p>{room.attendees} {attendees}</p>
+                        </div>
+                    </div>
+            </div>
+        </Link>
     );
 };
