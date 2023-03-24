@@ -3,22 +3,24 @@
     display: flex;
     flex-flow: row wrap;
     justify-content:center;
-  }
-  
-  .roomList li{
-    width: 500px;
+    padding: 0 150px 0 150px;
+}
+
+.roomList li{
+    width: 400px;
     margin: 10px;
-  }
-  
-  .searchTag{
+}
+
+.searchTag{
     border-radius: 10px;
-    width: 270px;
+    width: 350px;
     display: flex;
     justify-content: space-around;
     height: 30px;
     margin: 10px 0 0 10px;
-  }
-  
-  .searchTag button{
+}
+
+.searchTag button{
     font-size: 12px;
-  }
+    margin: 0 2px 0 2px 0;
+}

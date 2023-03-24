@@ -4,7 +4,7 @@ import { useUser } from '@auth0/nextjs-auth0/client';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRightFromBracket, faPeopleGroup } from "@fortawesome/free-solid-svg-icons";
 import Router from 'next/router'
-import Styles from "../../styles/StudentCard.module.css"
+import Styles from "../../styles/StudentRoomCard.module.css"
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
@@ -24,26 +24,24 @@ export default function StudentCard({student, editMode, handleDismiss}) {
 	// }
 
 	return (
-		<Link href={`/students/${student.id}`}>
-			<div className={Styles.container}>
-				<div>
-					<p className={Styles.title}>Name: <strong>{student.lastName}</strong> {student.name} </p>
-					<div className={Styles.data}>
-						<p className={Styles.teacher}>Age: {student.age}</p>
-						<p className={Styles.teacher}>Gender: {student.gender}</p>
+		<div className={Styles.container}>
+			<Link href={`/students/${student.id}`}>
+				<div className={Styles.card}>
+					<div>
+						<p className={Styles.title}><strong>{student.lastName}</strong><br/>{student.name} </p>
 					</div>
+					<img
+						src={student.profileImageUrl ? student.profileImageUrl : "https://placehold.co/20x20"}
+						alt={student.name + " " + student.lastName + "profile picture"} 
+						className={utilStyles.thumbnail}>
+					</img>
 				</div>
-				<img
-					src={student.profileImageUrl ? student.profileImageUrl : "https://placehold.co/20x20"}
-					alt={student.name + " " + student.lastName + "profile picture"} 
-					className={utilStyles.thumbnail}>
-				</img>
-				{user && editMode ? 
-					<button onClick={()=>handleDismiss(student.id)}>
-					Dismiss <FontAwesomeIcon style={{fontSize:"25px"}} icon={faArrowRightFromBracket}></FontAwesomeIcon> 
-					</button>
-					: <></>}	
-			</div>
-		</Link>
+			</Link>
+			{user && editMode ? 
+				<button className={Styles.dismissButton} onClick={()=>handleDismiss(student.id)}>
+				<FontAwesomeIcon style={{fontSize:"25px"}} icon={faArrowRightFromBracket}></FontAwesomeIcon> 
+				</button>
+				: <></>}	
+		</div>
 	);
 };

@@ -1,24 +1,25 @@
 .roomList{
-  width: 100vw;
-  display: flex;
-  flex-flow: row wrap;
-  justify-content:center;
+    width: 100vw;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content:center;
 }
 
 .roomList li{
-  width: 500px;
-  margin: 10px;
+    width: 500px;
+    margin: 10px;
 }
 
 .searchTag{
-  border-radius: 10px;
-  width: 270px;
-  display: flex;
-  justify-content: space-around;
-  height: 30px;
-  margin: 10px 0 0 10px;
+    border-radius: 10px;
+    width: 350px;
+    display: flex;
+    justify-content: space-around;
+    height: 30px;
+    margin: 10px 0 0 10px;
 }
 
 .searchTag button{
-  font-size: 12px;
+    font-size: 12px;
+    margin: 0 2px 0 2px 0;
 }

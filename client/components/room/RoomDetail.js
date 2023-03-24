@@ -1,8 +1,11 @@
 import Link from 'next/link';
 
-import StudentCard from "../student/StudentCard";
+import StudentRoomCard from "../student/StudentRoomCard";
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare, faTrash, faRotateLeft, faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
+import Styles from "../../styles/RoomDetail.module.css"
 import Router from 'next/router'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
@@ -97,10 +100,9 @@ export default function RoomDetail({room}) {
     }
 
     return (
-        <div>
-            <Link href="/">VER TODOS</Link>
-            <h2>ROOM DETAIL</h2>
-            <form>
+        <div className={Styles.container}>
+            <h2>ROOM DETAILS</h2>
+            <form className={Styles.data}>
                 <div>
                     <label htmlFor="name">Name: </label>
                     <input
@@ -124,34 +126,33 @@ export default function RoomDetail({room}) {
                     onChange={handleChangeForm}
 					onBlur={handleChangeForm}
                     />
+                    <p className={Styles.attendeesText} >Attendees: <strong>{room.data.attendees}</strong></p>
                 </div>
-                <div>
-                    <label htmlFor="attendees">Attendees: </label>
-                    <input
-                    type="number"
-                    id="attendees"
-                    name="attendees"
-                    value={room.data.attendees}
-                    disabled={true}
-                    
-                    />
-                </div>
+                <ul className={Styles.attendees}>
+                    {students ? students.map(student => {
+                        return <StudentRoomCard key={student.id} student={student} editMode={editMode} handleDismiss={handleDismiss}/>
+                    }): <></>}
+                </ul>
+
             </form>
-            <ul>
-                {students ? students.map(student => {
-                    return <StudentCard key={student.id} student={student} editMode={editMode} handleDismiss={handleDismiss}/>
-                }): <></>}
-            </ul>
 
             {editMode ? (
                 <>
-                    <button onClick={toggleEditMode}>CANCELAR CAMBIOS</button>
-                    <button onClick={() => handleEdit(room.data.id)}>GUARDAR</button>
+                    <button onClick={toggleEditMode}>
+                        <FontAwesomeIcon style={{fontSize:"20px"}} icon={faRotateLeft}></FontAwesomeIcon>
+                    </button>
+                    <button onClick={() => handleEdit(room.data.id)}>
+                        <FontAwesomeIcon style={{fontSize:"20px"}} icon={faFloppyDisk}></FontAwesomeIcon>
+                    </button>
                 </>
                 ) : (
                 <>
-                    <button onClick={toggleEditMode}>EDITAR</button>
-                    <button onClick={() => handleDelete(room.data.id)}>ELIMINAR</button>
+                    <button onClick={toggleEditMode}>
+                        <FontAwesomeIcon style={{fontSize:"20px"}} icon={faPenToSquare}></FontAwesomeIcon>
+                    </button>
+                    <button onClick={() => handleDelete(room.data.id)}>
+                        <FontAwesomeIcon style={{fontSize:"20px", color:"red"}} icon={faTrash}></FontAwesomeIcon>
+                    </button>
                 </>
             )}
       </div>

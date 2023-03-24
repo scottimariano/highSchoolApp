@@ -1,0 +1,39 @@
+.container {
+    border: solid grey 1px;
+    border-radius: 10px;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+    height: 70px;
+    width: 400px;
+}
+
+.container img {
+    margin-right: 5px;
+}
+
+.data{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.title{
+    font-size: 25px;
+    margin-left: 10px;
+}
+
+.teacher{
+    margin-left: 25px;
+}
+
+.attendees{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 30px;
+    width: 150px;
+    align-self: flex-end;
+}
+

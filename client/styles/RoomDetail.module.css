@@ -1,0 +1,48 @@
+.container{
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+}
+
+.container button{
+    background-color: white;
+    border: 1px solid grey;
+    border-radius: 50%;
+    display: block;
+    width: 50px;
+    height: 50px;
+}
+
+.data{
+    border: solid 1px grey;
+    border-radius: 10px;
+    padding: 10px 10px;
+    width: 600px;
+}
+
+.data label{
+    font-size: 20px;
+}
+
+.data input{
+    font-size: 25px;
+    color: black;
+    font-weight: bold;
+}
+
+.data input[disabled] {
+    background-color: white;
+    border: none
+}
+.attendeesText {
+    font-size: 20px;
+}
+
+.attendees{
+    margin-top: 10px;
+    width: 100%;
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+    border: 1px solid blue;
+}

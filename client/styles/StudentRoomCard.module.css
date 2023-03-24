@@ -1,0 +1,54 @@
+.container{
+    width: 40%;
+    display: flex;
+    align-items: center;
+}
+
+.card {
+    border: solid grey 1px;
+    border-radius: 10px;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+    width: 200px;
+    margin: 5px;
+}
+
+.card img {
+    margin-right: 5px;
+    scale: 80%;
+}
+
+.data{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.title{
+    font-size: 15px;
+    margin-left: 10px;
+}
+
+.teacher{
+    margin-left: 25px;
+}
+
+.attendees{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 30px;
+    width: 150px;
+    align-self: flex-end;
+}
+
+.dismissButton{
+    position: relative;
+    background-color: red;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}

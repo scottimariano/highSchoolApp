@@ -3,23 +3,16 @@ import { useState, useEffect } from "react";
 import RoomCard from "../../components/room/RoomCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import Styles from "../../styles/StudentsHome.module.css"
+import Styles from "../../styles/Home.module.css"
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
-const Home = () => {
+export default function Home ({list}) {
 	const [rooms, setRooms] = useState([]);
 	const [filteredRooms, setFilteredRooms] = useState([]);
-	const [toogleSort, changeToogleSort] = useState(true)
-
-	const getRooms = async ()=>{
-		const res = await fetch(`${API_URL}/rooms`);
-		const data = await res.json();
-		setRooms(data);
-	}
-
+	const [searchInput, setSearchInput] = useState("");
+	const [toogleSort, changeToogleSort] = useState(false)
+	
 	useEffect(() => {
-		getRooms();
+		setRooms(list.data);
 	}, []);
 	
 	useEffect(() => {
@@ -28,16 +21,17 @@ const Home = () => {
 
 
 	function handleSearh(e){
-		let searchTerm = e.target.value
+		setSearchInput(e.target.value)
 		setFilteredRooms(rooms.filter(room => {
 			let roomName = room.name.toLowerCase();
-			return roomName.includes(searchTerm.toLowerCase())
+			return roomName.includes(searchInput.toLowerCase())
 		}))
 	}
 
 	function handleClearSearch(){
 		setFilteredRooms(rooms)
-		changeToogleSort(true)
+		setSearchInput("")
+		changeToogleSort(false)
 	}
 
 	function handleSort(){
@@ -63,13 +57,13 @@ const Home = () => {
 			</Head>
 			<div className={Styles.searchTag}>
 				<FontAwesomeIcon style={{fontSize:"25px"}} icon={faSearch}></FontAwesomeIcon>
-				<input type="text" placeholder='Search room by name' onChange={handleSearh}/>
+				<input type="text" placeholder='Search room by name' value={searchInput} onChange={e=>handleSearh(e)}/>
 
 				<button onClick={()=>handleClearSearch()}>
 					CLEAR
 				</button>
 				<button onClick={()=>handleSort()}>
-					{toogleSort === true ? "A-Z" : "Z-A"}
+					{toogleSort === true ? "A-Z" : "Z-A"} &darr;
 				</button>
 			</div>
 			<ul className={Styles.roomList}>
@@ -82,5 +76,3 @@ const Home = () => {
 		</div>
 		);
 };
-
-export default Home;

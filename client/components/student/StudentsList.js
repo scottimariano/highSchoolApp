@@ -3,14 +3,13 @@ import StudentCard from "../student/StudentCard"
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import Styles from "../../styles/Home.module.css"
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import Styles from "../../styles/StudentsHome.module.css"
 
 export default function StudentsList ({list}) {
 	const [students, setStudents] = useState([]);
 	const [filteredStudents, setFilteredstudents] = useState([]);
-    const [toogleSort, changeToogleSort] = useState(true)
+	const [searchInput, setSearchInput] = useState("");
+    const [toogleSort, changeToogleSort] = useState(false);
 
 	useEffect(() => {
         setStudents(list.data);
@@ -21,17 +20,19 @@ export default function StudentsList ({list}) {
 	}, [students]);
 
 	function handleSearh(e){
-		let searchTerm = e.target.value.toLowerCase()
+		setSearchInput(e.target.value)
 		setFilteredstudents(students.filter(student => {
 			let name = student.name.toLowerCase();
 			let lastName = student.lastName.toLowerCase();
-			return (name.includes(searchTerm) || lastName.includes(searchTerm))
+			return (name.includes(e.target.value.toLocaleLowerCase()) ||
+					lastName.includes(e.target.value.toLocaleLowerCase()))
 		}))
 	}
 
 	function handleClearSearch(){
 		setFilteredstudents(students)
-        changeToogleSort(true)
+		setSearchInput("")
+        changeToogleSort(false)
 	}
 
     function handleSort(){
@@ -57,13 +58,13 @@ export default function StudentsList ({list}) {
 			</Head>
 			<div className={Styles.searchTag}>
 				<FontAwesomeIcon style={{fontSize:"25px"}} icon={faSearch}></FontAwesomeIcon>
-				<input type="text" placeholder='Search room by name' onChange={handleSearh}/>
+				<input type="text" placeholder='Search room by name' value={searchInput} onChange={e=>handleSearh(e)}/>
 
 				<button onClick={()=>handleClearSearch()}>
 					CLEAR
 				</button>
 				<button onClick={()=>handleSort()}>
-					{toogleSort ? "A-Z" : "Z-A"}
+					{toogleSort ? "A-Z" : "Z-A"} &darr;
 				</button>
 			</div>
 			<ul className={Styles.roomList}>
