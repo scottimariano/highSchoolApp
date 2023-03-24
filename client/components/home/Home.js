@@ -37,6 +37,7 @@ const Home = () => {
 
 	function handleClearSearch(){
 		setFilteredRooms(rooms)
+		changeToogleSort(true)
 	}
 
 	function handleSort(){
@@ -68,7 +69,7 @@ const Home = () => {
 					CLEAR
 				</button>
 				<button onClick={()=>handleSort()}>
-					{toogleSort ? "A-Z" : "Z-A"}
+					{toogleSort === true ? "A-Z" : "Z-A"}
 				</button>
 			</div>
 			<ul className={Styles.roomList}>

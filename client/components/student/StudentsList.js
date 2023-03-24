@@ -31,6 +31,7 @@ export default function StudentsList ({list}) {
 
 	function handleClearSearch(){
 		setFilteredstudents(students)
+        changeToogleSort(true)
 	}
 
     function handleSort(){
