@@ -1,4 +1,4 @@
-import RoomDetail from "../../components/room/RoomDetail";
+import RoomDetail from "../../components/room/roomDetail/RoomDetail";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 

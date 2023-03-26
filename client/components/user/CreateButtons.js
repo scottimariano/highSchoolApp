@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRotateLeft, faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
-import Styles from "../../styles/CreateButtons.module.css"
+import Styles from "../../styles/user/CreateButtons.module.css"
 
 export default function CreateButtons({ handleReset, handleCreate }) {
   return (

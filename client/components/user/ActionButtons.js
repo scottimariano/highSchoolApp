@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faRotateLeft, faFloppyDisk, faTrash } from "@fortawesome/free-solid-svg-icons";
-import Styles from "../../styles/ActionButtons.module.css"
+import Styles from "../../styles/user/ActionButtons.module.css"
 
 export default function ActionButtons({ editMode, onToggleEditMode, onEdit, onDelete, id }) {
   return (

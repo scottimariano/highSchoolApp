@@ -1,10 +1,9 @@
 import Link from 'next/link';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChalkboardUser, faUserPlus } from "@fortawesome/free-solid-svg-icons"; //
-import StudentCard from "../student/StudentCard";
 
 export default function Admin() {
-
+    
     return (
         <div>
             <h2>ADMIN PAGE</h2>

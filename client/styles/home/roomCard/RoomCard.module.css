@@ -2,15 +2,9 @@
     border: solid grey 1px;
     border-radius: 10px;
     display: flex;
-    flex-flow: row nowrap;
-    justify-content: space-between;
-    align-items: center;
-    height: 70px;
-    width: 400px;
-}
-
-.container img {
-    margin-right: 5px;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    background-color: white;
 }
 
 .data{
@@ -36,4 +30,3 @@
     width: 150px;
     align-self: flex-end;
 }
-

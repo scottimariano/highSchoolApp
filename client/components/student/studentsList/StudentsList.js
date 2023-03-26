@@ -1,9 +1,9 @@
 import Head from 'next/head';
-import StudentCard from "../student/StudentCard"
+import StudentCard from "./studentCard/StudentCard"
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import Styles from "../../styles/StudentsHome.module.css"
+import Styles from "../../../styles/student/studentList/StudentsHome.module.css"
 
 export default function StudentsList ({list}) {
 	const [students, setStudents] = useState([]);
@@ -58,7 +58,7 @@ export default function StudentsList ({list}) {
 			</Head>
 			<div className={Styles.searchTag}>
 				<FontAwesomeIcon style={{fontSize:"25px"}} icon={faSearch}></FontAwesomeIcon>
-				<input type="text" placeholder='Search room by name' value={searchInput} onChange={e=>handleSearh(e)}/>
+				<input type="text" placeholder='Search student by name' value={searchInput} onChange={e=>handleSearh(e)}/>
 
 				<button onClick={()=>handleClearSearch()}>
 					CLEAR

@@ -1,10 +1,7 @@
-import StudentRoomCard from "../student/StudentRoomCard";
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import { useUser } from '@auth0/nextjs-auth0/client';
-import ActionButtons from "../user/ActionButtons";
-import Styles from "../../styles/CreateRoom.module.css"
-import CreateButtons from "../user/CreateButtons";
+import Styles from "../../../styles/room/createRoom/CreateRoom.module.css"
+import CreateButtons from "../../user/CreateButtons";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
@@ -12,14 +9,10 @@ export default function CreateRoom() {
 	/// AGREGAR VALIDACION DE RUTA!!!
 
     const { push } = useRouter();
-    const [editMode, setEditMode] = useState(false);
     const [input, setInput] = useState({
         name: '',
         teacher: ''
     })
-  
-    const { user } = useUser();
-
     function handleChangeForm(e) {
 		setInput({
 			...input,

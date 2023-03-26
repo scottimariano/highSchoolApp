@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import styles from '../../styles/NavBar.module.css';
-import utilStyles from '../../styles/utils.module.css';
 import { useRouter } from 'next/router';
 
 export default function Layout({children}) {
@@ -14,9 +13,7 @@ export default function Layout({children}) {
                 <nav className={styles.container}>
                     <Link  href={`/`} className={styles.logo}>
                         <img 
-                            src='https://res.cloudinary.com/dmwfysfrn/image/upload/c_thumb,w_200,g_face/v1679344992/ratherLabApp/assets/Screenshot_2022-10-12_112545_1_lmwpzk.webp'
-                            className={utilStyles.thumbnail}
-                        />
+                            src='https://res.cloudinary.com/dmwfysfrn/image/upload/c_thumb,w_200,g_face/v1679344992/ratherLabApp/assets/Screenshot_2022-10-12_112545_1_lmwpzk.webp'/>
                         <div>
                             <h1>RatherLab University</h1>
                             <p>Boost your development</p>
@@ -34,7 +31,7 @@ export default function Layout({children}) {
                                 </div> :
                                 <div >
                                     <div className={styles.userInfo}>
-                                        <img src={user.picture} alt={user.name} className={utilStyles.borderCircle}></img>
+                                        <img src={user.picture} alt={user.name}></img>
                                         <a href="/api/auth/logout">Logout</a>
                                     </div>
                                 </div>

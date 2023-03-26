@@ -1,4 +1,4 @@
-import StudentDetail from "../../components/student/StudentDetail";
+import StudentDetail from "../../components/student/studentDetail/StudentDetail";
 import React from 'react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL

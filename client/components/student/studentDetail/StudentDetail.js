@@ -1,12 +1,12 @@
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import Styles from "../../styles/StudentDetail.module.css"
+import { useUser } from '@auth0/nextjs-auth0/client';
+import { useRouter } from 'next/navigation';
+import {reactSelectStyles} from '../../../styles/react-select/reactSelectStyles'
 import { CldUploadButton } from 'next-cloudinary';
 import Select from 'react-select'
 import Router from 'next/router'
-import {reactSelectStyles} from '../../styles/react-select/reactSelectStyles'
-import ActionButtons from '../user/ActionButtons';
-import { useUser } from '@auth0/nextjs-auth0/client';
+import ActionButtons from '../../user/ActionButtons';
+import Styles from "../../../styles/student/studentDetail/StudentDetail.module.css"
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 const NO_PROFILE_PICTURE = "/assets/defaultAvatar.png"
@@ -236,6 +236,6 @@ export default function StudentDetail({student}) {
                     id={student.data.id}
                 />
             }
-      </div>
+        </div>
   );
 };

@@ -1,13 +1,11 @@
 import Link from 'next/link';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Import the FontAwesomeIcon component
-import { faPeopleGroup } from "@fortawesome/free-solid-svg-icons"; //
-import styles from '../../styles/RoomCard.module.css';
-
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPeopleGroup } from "@fortawesome/free-solid-svg-icons";
+import styles from "../../../styles/home/roomCard/RoomCard.module.css"
 
 export default function RoomCard({room}) {
 
-    let attendees = room.attendees > 1 ? "attendee" : "attendees" 
+    let attendees = room.attendees > 1 ? "attendees" : "attendee" 
 
     return (
         <Link  href={`/rooms/${room.id}`}>

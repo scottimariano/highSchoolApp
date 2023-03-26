@@ -1,9 +1,9 @@
-import StudentRoomCard from "../student/StudentRoomCard";
+import StudentRoomCard from "./studentRoomCard/StudentRoomCard";
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useUser } from '@auth0/nextjs-auth0/client';
-import Styles from "../../styles/RoomDetail.module.css"
-import ActionButtons from "../user/ActionButtons";
+import Styles from "../../../styles/room/roomDetail/RoomDetail.module.css"
+import ActionButtons from "../../user/ActionButtons";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 

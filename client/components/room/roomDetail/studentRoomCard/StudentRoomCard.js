@@ -1,8 +1,7 @@
 import Link from 'next/link';
-import utilStyles from '../../styles/utils.module.css';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import Router from 'next/router'
-import Styles from "../../styles/StudentRoomCard.module.css"
+import Styles from "../../../../styles/room/roomDetail/studentRoomCard/StudentRoomCard.module.css"
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
@@ -31,8 +30,7 @@ export default function StudentRoomCard({student, editMode, handleDismiss}) {
 					</div>
 					<img
 						src={student.profileImageUrl ? student.profileImageUrl : "https://placehold.co/20x20"}
-						alt={student.name + " " + student.lastName + "profile picture"} 
-						className={utilStyles.thumbnail}>
+						alt={student.name + " " + student.lastName + "profile picture"}>
 					</img>
 				</div>
 			</Link>

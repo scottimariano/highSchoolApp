@@ -1,4 +1,4 @@
-import StudentsList from '../components/student/StudentsList';
+import StudentsList from '../components/student/studentsList/StudentsList';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 

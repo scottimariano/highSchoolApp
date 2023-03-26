@@ -1,4 +1,4 @@
-import CreateRoom from "../../components/room/CreateRoom";
+import CreateRoom from "../../components/room/createRoom/CreateRoom";
 
 export default function CreateStudentPage(){
     

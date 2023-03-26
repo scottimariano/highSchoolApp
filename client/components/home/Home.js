@@ -1,9 +1,9 @@
 import Head from 'next/head';
 import { useState, useEffect } from "react";
-import RoomCard from "../../components/room/RoomCard";
+import RoomCard from "./roomCard/RoomCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import Styles from "../../styles/Home.module.css"
+import Styles from "../../styles/home/Home.module.css"
 
 export default function Home ({list}) {
 	const [rooms, setRooms] = useState([]);
