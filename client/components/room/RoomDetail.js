@@ -35,7 +35,7 @@ export default function RoomDetail({room}) {
     },[dismissed])
 
     function handleDelete(roomId){
-        let confirmDelete = confirm(`You are going to delete ${room.data.name} room, Are you sure`)
+        let confirmDelete = confirm(`You are going to delete ${room.data.name} room, Are you sure?`)
         if (confirmDelete){
             const endpoint = API_URL + '/rooms/' + roomId
             const options = {
@@ -126,11 +126,13 @@ export default function RoomDetail({room}) {
                     />
                     <p className={Styles.attendeesText} >Attendees: <strong>{room.data.attendees}</strong></p>
                 </div>
-                <ul className={Styles.attendees}>
-                    {students ? students.map(student => {
-                        return <StudentRoomCard key={student.id} student={student} editMode={editMode} handleDismiss={handleDismiss}/>
-                    }): <></>}
-                </ul>
+                {room.data.attendees == 0 ? <></> :
+                    <ul className={Styles.attendees}>
+                        {students ? students.map(student => {
+                            return <StudentRoomCard key={student.id} student={student} editMode={editMode} handleDismiss={handleDismiss}/>
+                        }): <></>}
+                    </ul>
+                }
 
             </form>
 

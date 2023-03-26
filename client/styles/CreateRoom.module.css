@@ -1,0 +1,32 @@
+.container{
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.container h2{
+    margin: 10px;
+}
+
+.data{
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    border: solid 1px grey;
+    border-radius: 10px;
+    padding: 10px;
+    width: 600px;
+}
+
+.data label{
+    font-size: 20px;
+}
+
+.data input{
+    font-size: 25px;
+    color: black;
+    font-weight: bold;
+    margin: 5px 0 5px 0;
+    border-color: grey;
+}
