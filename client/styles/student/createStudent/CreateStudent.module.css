@@ -1,0 +1,116 @@
+.container{
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.container h2{
+    margin: 10px;
+    color: white;
+}
+
+.data{
+    border: solid 1px grey;
+    border-radius: 10px;
+    padding: 10px 10px;
+    width: 750px;
+    display: flex;
+    min-height: 260px;
+    background-color: white;
+}
+
+.dataInputs{
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    width: 65%;
+    border-right: solid grey 1px;
+}
+
+.data label{
+    font-size: 16px;
+}
+
+.data input{
+    font-size: 16px;
+    color: black;
+    margin-left: 5px;
+    padding-left: 10px;
+    border-color: grey;
+    border-radius: 5px;
+    line-height: 30px;
+    border: 1px solid grey;
+}
+
+.data input[disabled] {
+    background-color: white;
+    border-color: grey;
+}
+
+.ageInput{
+    width: 60px;
+    margin-right: 10px;
+}
+
+.data select{
+    color: black;
+    opacity: 1;
+    border-color: grey;
+    background-color: white;
+    font-size: 16px;
+    margin-left: 5px;
+    padding-left: 10px;
+    border-radius: 5px;
+    height: 30px;
+}
+
+.data select:disabled {
+    color: black;
+    opacity: 1;
+    border-color: grey;
+    background-color: white;
+}
+
+.selectContainer{
+    display: flex;
+    align-items:center;
+    min-height: 30px;
+    margin-bottom: 5px;
+}
+
+.profilePicContainer{
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 10px 10px 20px;
+    width: 250px;
+}
+
+.profilePicContainer img{
+    border-radius: 50%;
+    object-fit: contain;
+    width: 125px;
+    height: 125px;
+    border: 1px solid grey;
+}
+
+.picActionButtons{
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+}
+
+.picButton{
+    display: flex;
+    justify-content: center;
+    margin: 10px;
+    border-radius: 10px;
+    height: 40px;
+    width: 80px;
+    background-color: white;
+    border: 1px grey solid;
+    font-size: 10px;
+    cursor: pointer;
+}

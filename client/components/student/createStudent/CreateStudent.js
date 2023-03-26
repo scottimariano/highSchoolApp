@@ -1,122 +1,84 @@
-import React, { useState, useEffect} from 'react';
-import Link from 'next/link';
-import Select from 'react-select'
+import { useEffect, useState } from 'react';
+import { useUser } from '@auth0/nextjs-auth0/client';
+import { useRouter } from 'next/navigation';
+import {reactSelectStyles} from '../../../styles/react-select/reactSelectStyles'
 import { CldUploadButton } from 'next-cloudinary';
+import Select from 'react-select'
+import Styles from "../../../styles/student/createStudent/CreateStudent.module.css"
+import CreateButtons from "../../user/CreateButtons";
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL
+const NO_PROFILE_PICTURE = "/assets/defaultAvatar.png"
 
-export default function CreateStudent() {
-	const [input, setInput] = useState({
-		name: '',
-		lastName: '',
-		age: '',
-		gender: '',
-		roomId: '',
-		siblingsIds: [],
-		profileImageUrl: '',
-	});
-	const [errors, setErrors] = useState({ clear: true });
-	const [students, setStudents] = useState([])
-	const [siblings, setSiblings] = useState([])
-	const [rooms, setRooms] = useState([])
-	const [room, setRoom] = useState([])
-	const [profilePic, updateProfilePic] = useState();
+export default function CreateStudent(data) {
+	console.log(data.formattedRooms)
+    const { push } = useRouter();
+    const { user } = useUser();
+    const [input, setInput] = useState({
+        name: "",
+        lastName: "",
+        age: "",
+        gender: "",
+        profileImageUrl: NO_PROFILE_PICTURE,
+        siblings: [],
+		siblingsSelected:[],
+        room: ""
+    })
 
-	const getStudents = async ()=>{
-		const res = await fetch(`${API_URL}/students`);
-		const data = await res.json();
-		const formattedStudents = data.map(student => ({
-			value: student.id,
-			label: `${student.name} ${student.lastName}`
-		  }));
-		setStudents(formattedStudents);
-	}
+	useEffect(()=>{
+		console.log(input)
+	},[input])
 
-	const getRooms = async ()=>{
-		const res = await fetch(`${API_URL}/rooms`);
-		const data = await res.json();
-		const formattedRoom = data.map(room => ({
-			value: room.id,
-			label: `${room.name} ${room.teacher}`
-		  }));
-		  setRooms(formattedRoom);
-	}
-
-	useEffect(() => {
-		getStudents();
-		getRooms();
-	}, []);
-
-	useEffect(() => {
-		console.log("profilePic");
-		console.log(profilePic);
-		console.log(input);
-	}, [input]);
-	
-
-	function handleSiblingSelection(siblings){
-		setSiblings(siblings)
-		setInput({
-			...input,
-			siblingsIds: siblings.map(option => option.value)
-		})
-	}
-
-	function handleRoomSelection(room){
-		setRoom(room)
-		if(room){
-			setInput({
-				...input,
-				roomId: room.value
-			})
-		} else {
-			setInput({
-				...input,
-				roomId: ''
-			})
-		}
-	}
-
-	function formValidation(input) {
-		let errors = { clear: false };
-		// if (!input.name) {
-		// 	errors.name = 'required field';
-		// 	errors.clear = true;
-		// } else {
-		// 	if (!/^[a-zA-Z ]+$/g.test(input.name)) {
-		// 		errors.name = `Can't contains numbers`;
-		// 		errors.clear = true;
-		// 	}
-		// }
-        
-		// if (!input.lastName) {
-		// 	errors.lastName = 'required field';
-		// 	errors.clear = true;
-		// }else {
-		// 	if (!/^[a-zA-Z ]+$/g.test(input.lastName)) {
-		// 		errors.lastName = `Can't contains numbers`;
-		// 		errors.clear = true;
-		// 	}
-		// }
-
-		return errors;
-	}
-
-	function handleChangeForm(e) {
-		setErrors(
-			formValidation({
-				...input,
-				[e.target.name]: e.target.value,
-			})
-		);
+    function handleChangeForm(e) {
 		setInput({
 			...input,
 			[e.target.name]: e.target.value,
 		});
 	}
 
-	function handleOnUpload(result, widget) {
+	function handleReset(){
+		setInput({
+			name: "",
+			lastName: "",
+			age: null,
+			gender: "",
+			profileImageUrl: "",
+			siblings: [],
+			room: null
+		})
+	}
 
-		updateProfilePic(result.info);
+    async function handleCreate(){
+        let siblingsFormatted = input.siblings.map(sibling=>sibling.value)
+        let roomId = input.room ? input.room.value : null
+        let dataFormatted = {
+            ...input,
+            roomId: roomId,
+            siblingsIds: siblingsFormatted
+        }
+
+        const endpoint = API_URL + '/students'
+        const JSONdata = JSON.stringify(dataFormatted)
+		console.log(JSONdata)
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSONdata
+        }
+        fetch(endpoint, options)
+        .then(response => {
+            response.status == 201 ? alert("Student created successfully") : alert("We had a problem creating the student, please try again")
+			return response.json();
+        })
+        .then(data => {
+            push(`/students/${data.id}`)
+        })
+    }
+
+    function handleOnUpload(result, widget) {
+
 		setInput({
 			...input,
 			profileImageUrl: result.info.secure_url
@@ -124,112 +86,106 @@ export default function CreateStudent() {
 
 	}
 
-	function handleSubmit(e) {
-		e.preventDefault();
-		let data = input;
-		setSiblings([]);
-        const JSONdata = JSON.stringify(data)
-        const endpoint = API_URL + '/students'
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSONdata,
-        }
-        fetch(endpoint, options)
-        .then(response => {
-            response.status == 201 ? alert("Student Created successfully") : alert("We had a probleasdam creating the student, please try again")
-        })
-       
+    function handleSiblingSelection(siblingsSelection){
 		setInput({
-			name: '',
-			lastName: '',
-			age: '',
-			gender: '',
-			roomId: '',
-			siblingsIds: [],
-			profileImageUrl: [],
-		});
-        setErrors({ clear: true });
-        updateProfilePic();
+            ...input,
+            siblings: siblingsSelection})
 	}
 
-	return (
-		<div>
-			<div >
-                <h2>Create new room: </h2>
-				<form onSubmit={handleSubmit}>
-					<div>
-						<label>Name: </label>
-						<input
-							name="name"
-							value={input.name}
-							required
-							onChange={handleChangeForm}
-							onBlur={handleChangeForm}></input>
-						{!errors.name ? (<p></p>) : (<p>{errors.name}</p>)}
-						<label>Last Name: </label>
-						<input
-							name="lastName"
-							value={input.lastName}
-							required
-							onChange={handleChangeForm}
-							onBlur={handleChangeForm}></input>
-						{!errors.lastName ? (<p></p>) : (<p>{errors.lastName}</p>)}
-						<label>Age: </label>
-						<input
-							name="age"
-							type="number"
-							value={input.age}
-							required
-							onChange={handleChangeForm}
-							onBlur={handleChangeForm}></input>
-						{!errors.age ? (<p></p>) : (<p>{errors.age}</p>)}
-						<div>
-							<label >
-								Siblings
-							</label>
-							<Select
-							options={students}
-							instanceId = "siblingSelect"
-							isMulti
-							isClearable
-							value={siblings}
-							placeholder="Select if student has siblings"
-							onChange={handleSiblingSelection}
-							/>
-						</div>
-						<div>
-							<label >
-								Room
-							</label>
-							<Select
-							options={rooms}
-							instanceId = "roomSelect"
-							isClearable
-							value={room}
-							placeholder="Asign a room"
-							onChange={handleRoomSelection}
-							/>
-						</div>
-					</div>
-					<CldUploadButton uploadPreset="bvkbj8ac" onUpload={handleOnUpload} />
+    function handleRoomSelection(roomSelection){
+		setInput({
+            ...input,
+            room: roomSelection})
+	}
 
-					{profilePic && (
-						<>
-						{profilePic.resource_type === 'image' && (
-							<p><img width={150} height={150} src={ profilePic.secure_url } alt="Uploaded image" /></p>
-						)}
-						</>
-					)}
-					<div>
-						<button type="submit" disabled={errors.clear}>
-							<h4>Create Room</h4>
-						</button>
+    return (
+        <div className={Styles.container}>
+            <h2>CREATE NEW STUDENT</h2>
+            <form className={Styles.data}>
+                <div className={Styles.dataInputs}>
+                    <div className={Styles.selectContainer}>
+                        <label htmlFor="name">Name: </label>
+                        <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        value={input.name}
+                        onChange={handleChangeForm}
+                        onBlur={handleChangeForm}
+                        />
+                    </div>
+                    <div className={Styles.selectContainer}>
+                        <label htmlFor="teacher">Last Name: </label>
+                        <input
+                        type="text"
+                        id="lastName"
+                        name="lastName"
+                        value={input.lastName}
+                        onChange={handleChangeForm}
+                        onBlur={handleChangeForm}
+                        />
+                    </div>
+                    <div className={Styles.selectContainer}>
+                        <label htmlFor="age">Age: </label>
+                        <input
+                        className={Styles.ageInput}
+                        type="number"
+                        id="age"
+                        name="age"
+                        value={input.age}
+                        min="1"
+                        onChange={handleChangeForm}
+                        onBlur={handleChangeForm}
+                        />
+                        <label htmlFor="gender">Gender: </label>
+                        <select
+                            id="gender"
+                            name="gender"
+                            value={input.gender}
+                            onChange={handleChangeForm}
+                            onBlur={handleChangeForm}
+                        >
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+                    <div className={Styles.selectContainer}>
+                        <label htmlFor="siblings">Siblings: </label>
+                        <Select
+                            options={data.formattedStudents}
+                            instanceId = "siblingSelect"
+                            isMulti
+                            isClearable
+                            styles={reactSelectStyles}
+                            value={input.siblings}
+                            onChange={handleSiblingSelection}
+                            placeholder="Choose a student to asociate"
+                        />
+                    </div>
+                    <div className={Styles.selectContainer}>
+                        <label htmlFor="Room">Room: </label>
+                        <Select
+                            options={data.formattedRooms}
+                            instanceId = "siblingSelect"
+                            isClearable
+                            styles={reactSelectStyles}
+                            value={input.room}
+                            onChange={handleRoomSelection}
+                            placeholder= "Choose a room to asociate"
+                        />
+                    </div>
+                </div>
+                <div className={Styles.profilePicContainer}>
+                    <img width={150} height={150} alt="Profile Picture" src={input.profileImageUrl} />
+					<div className={Styles.picActionButtons}>
+						<CldUploadButton className={Styles.picButton} uploadPreset="bvkbj8ac" onUpload={handleOnUpload} >
+							Update Picture
+						</CldUploadButton>
 					</div>
-				</form>
-			</div>
-		</div>
-	);
+                </div>
+                </form>
+
+				<CreateButtons handleCreate={handleCreate} handleReset={handleReset}/>
+        </div>
+  );
 };
