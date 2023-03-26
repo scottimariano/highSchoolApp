@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useUser } from '@auth0/nextjs-auth0/client';
 import { useRouter } from 'next/navigation';
+import { useUser } from '@auth0/nextjs-auth0/client';
 import {reactSelectStyles} from '../../../styles/react-select/reactSelectStyles'
 import { CldUploadButton } from 'next-cloudinary';
 import Select from 'react-select'
@@ -11,7 +11,6 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL
 const NO_PROFILE_PICTURE = "/assets/defaultAvatar.png"
 
 export default function CreateStudent(data) {
-	console.log(data.formattedRooms)
     const { push } = useRouter();
     const { user } = useUser();
     const [input, setInput] = useState({
@@ -26,8 +25,10 @@ export default function CreateStudent(data) {
     })
 
 	useEffect(()=>{
-		console.log(input)
-	},[input])
+		if (!user) {
+			push("/")
+		  }
+	})
 
     function handleChangeForm(e) {
 		setInput({
