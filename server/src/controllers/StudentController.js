@@ -16,7 +16,7 @@ studentController.get('/:id', async (req, res) => {
                 model: Student,
                 as: 'siblings',
                 through: 'Sibling',
-                attributes: ['id', 'name'],
+                attributes: ['id', 'name', 'lastName'],
                 through: {
                     attributes: []
                 }
@@ -107,7 +107,6 @@ studentController.put('/:id', async (req, res) => {
 
     const { id } = req.params;
     let {name, lastName, age, gender, roomId, profileImageUrl, siblingsIds} = req.body;
-
     Student.findByPk(id)
     .then((student) => {
         student.update(
@@ -121,18 +120,20 @@ studentController.put('/:id', async (req, res) => {
             }
         )
         .then(updatedStudent => {
+            updatedStudent.setSiblings([])
             if (siblingsIds && siblingsIds.length > 0) {
                 siblingsIds.forEach(id => {
                     Student.findByPk(id)
                     .then(student => {
                         updatedStudent.addSibling(student)
+                        student.addSibling(updatedStudent)
                     })
                     .catch(err => {
                         console.error(err);
                         return res.status(500).json({ message: 'Error associating sibling' });
                     })
                 });
-            } 
+            }
             return res.status(200).json(updatedStudent);
         })
         .catch((err)=>{
