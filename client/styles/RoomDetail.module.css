@@ -2,15 +2,11 @@
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
+    justify-content: center;
 }
 
-.container button{
-    background-color: white;
-    border: 1px solid grey;
-    border-radius: 50%;
-    display: block;
-    width: 50px;
-    height: 50px;
+.container h2{
+    margin: 10px;
 }
 
 .data{
@@ -28,21 +24,27 @@
     font-size: 25px;
     color: black;
     font-weight: bold;
+    margin-top: 5px;
+    padding-left: 10px;
+    border-color: grey;
 }
 
 .data input[disabled] {
     background-color: white;
-    border: none
+    border-color: grey;
 }
+
 .attendeesText {
+    margin-top: 5px;
     font-size: 20px;
 }
 
 .attendees{
     margin-top: 10px;
     width: 100%;
+    height: 250px;
     display: flex;
     flex-flow: column wrap;
     align-items: center;
-    border: 1px solid blue;
+    justify-content: flex-start;
 }

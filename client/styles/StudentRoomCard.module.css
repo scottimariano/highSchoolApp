@@ -46,9 +46,13 @@
 }
 
 .dismissButton{
-    position: relative;
-    background-color: red;
-    width: 50px;
+    background-color: white;
+    display: flex;
     height: 50px;
-    border-radius: 50%;
+    width: 50px;
+    border-radius: 100%;
+    font-size: 10px;
+    justify-content: center;
+    align-items: center;
+    color: red;
 }

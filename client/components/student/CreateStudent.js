@@ -12,7 +12,7 @@ export default function CreateStudent() {
 		gender: '',
 		roomId: '',
 		siblingsIds: [],
-		profileImageUrl: [],
+		profileImageUrl: '',
 	});
 	const [errors, setErrors] = useState({ clear: true });
 	const [students, setStudents] = useState([])

@@ -1,12 +1,9 @@
-import Link from 'next/link';
-
 import StudentRoomCard from "../student/StudentRoomCard";
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare, faTrash, faRotateLeft, faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
+import { useUser } from '@auth0/nextjs-auth0/client';
 import Styles from "../../styles/RoomDetail.module.css"
-import Router from 'next/router'
+import ActionButtons from "../user/ActionButtons";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
@@ -19,6 +16,7 @@ export default function RoomDetail({room}) {
     })
     const [students, setStudents] = useState(room.data.Students)
     const [dismissed, setDismissed] = useState([])
+    const { user } = useUser();
 
     const toggleEditMode = () => {
       setEditMode(!editMode);
@@ -48,7 +46,7 @@ export default function RoomDetail({room}) {
         }
         fetch(endpoint, options)
         .then(response => {
-            response.status == 200 ? alert("Room Deleted successfully") : alert("We had a probleasdam deleteing the room, please try again")
+            response.status == 200 ? alert("Room Deleted successfully") : alert("We had a problem deleteing the room, please try again")
         })
         push(`/`);
         }
@@ -92,7 +90,7 @@ export default function RoomDetail({room}) {
         .then(response => {
             response.status == 200 ? alert("Room Updated successfully") : alert("We had a probleasdam updating the room, please try again")
         })
-        push(`/rooms/${roomId}`);
+        Router.reload(window.location.pathname)
     }
 
     async function handleDismiss(id){
@@ -136,25 +134,14 @@ export default function RoomDetail({room}) {
 
             </form>
 
-            {editMode ? (
-                <>
-                    <button onClick={toggleEditMode}>
-                        <FontAwesomeIcon style={{fontSize:"20px"}} icon={faRotateLeft}></FontAwesomeIcon>
-                    </button>
-                    <button onClick={() => handleEdit(room.data.id)}>
-                        <FontAwesomeIcon style={{fontSize:"20px"}} icon={faFloppyDisk}></FontAwesomeIcon>
-                    </button>
-                </>
-                ) : (
-                <>
-                    <button onClick={toggleEditMode}>
-                        <FontAwesomeIcon style={{fontSize:"20px"}} icon={faPenToSquare}></FontAwesomeIcon>
-                    </button>
-                    <button onClick={() => handleDelete(room.data.id)}>
-                        <FontAwesomeIcon style={{fontSize:"20px", color:"red"}} icon={faTrash}></FontAwesomeIcon>
-                    </button>
-                </>
-            )}
+            {user && 
+                <ActionButtons editMode={editMode}
+                    onToggleEditMode={toggleEditMode}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                    id={room.data.id}
+                />
+            }
       </div>
   );
 };

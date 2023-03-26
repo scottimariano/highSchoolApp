@@ -1,27 +1,26 @@
 import Link from 'next/link';
 import utilStyles from '../../styles/utils.module.css';
 import { useUser } from '@auth0/nextjs-auth0/client';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRightFromBracket, faPeopleGroup } from "@fortawesome/free-solid-svg-icons";
 import Router from 'next/router'
 import Styles from "../../styles/StudentRoomCard.module.css"
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
-export default function StudentCard({student, editMode, handleDismiss}) {
+export default function StudentRoomCard({student, editMode, handleDismiss}) {
 	const { user, error, isLoading } = useUser();
 	
-	// async function handleDismiss(id){
-	//   let bodyContent = {roomId: null}
-	//   const res = await fetch(`${API_URL}/students/${id}`,{
-	//     method : 'PUT',
-	//     body: JSON.stringify(bodyContent),
-	//     headers: {
-	//       'Content-Type': 'application/json',
-	//     }
-	//   })
-	//   Router.reload(window.location.pathname)
-	// }
+	async function handleDismissRequest(id){
+		handleDismiss();
+		let bodyContent = {roomId: null}
+		const res = await fetch(`${API_URL}/students/${id}`,{
+			method : 'PUT',
+			body: JSON.stringify(bodyContent),
+			headers: {
+				'Content-Type': 'application/json',
+			}
+		})
+	  Router.reload(window.location.pathname)
+	}
 
 	return (
 		<div className={Styles.container}>
@@ -38,8 +37,8 @@ export default function StudentCard({student, editMode, handleDismiss}) {
 				</div>
 			</Link>
 			{user && editMode ? 
-				<button className={Styles.dismissButton} onClick={()=>handleDismiss(student.id)}>
-				<FontAwesomeIcon style={{fontSize:"25px"}} icon={faArrowRightFromBracket}></FontAwesomeIcon> 
+				<button className={Styles.dismissButton} onClick={()=>handleDismissRequest(student.id)}>
+					<span>Dismiss</span>
 				</button>
 				: <></>}	
 		</div>
