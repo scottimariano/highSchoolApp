@@ -7,7 +7,6 @@ import CreateButtons from "../../user/CreateButtons";
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
 export default function CreateRoom() {
-	/// AGREGAR VALIDACION DE RUTA!!!
 
     const { push } = useRouter();
     const [input, setInput] = useState({

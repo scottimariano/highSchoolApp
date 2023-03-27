@@ -1,0 +1,66 @@
+.container{
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.container h2{
+    margin: 10px;
+    color: white;
+}
+
+.data{
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-around;
+    border: solid 1px grey;
+    border-radius: 10px;
+    width: 600px;
+    height: 375px;
+    background-color: white;
+}
+
+.userData {
+    border-bottom: 1px solid grey;
+    padding-top: 10px;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+}
+
+.userData img {
+    border: 1px solid grey;
+    border-radius: 50%;
+    object-fit: contain;
+    height: 100px;
+    width: 100px;
+    margin-bottom: 10px;
+}
+
+.userData span {
+    margin-bottom: 10px;
+}
+
+.actionCards{
+    padding: 20px;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.card{
+    display: flex;
+    flex-flow: column nowrap;
+    border: solid 1px grey;
+    padding: 20px;
+    border-radius: 10px;
+    align-content: space-between;
+    align-items: center ;
+    width: 200px;
+}
+
+.card span{
+    margin-top: 5px;
+}

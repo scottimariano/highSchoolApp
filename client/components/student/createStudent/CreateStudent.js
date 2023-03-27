@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+
 import { useRouter } from 'next/navigation';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import {reactSelectStyles} from '../../../styles/react-select/reactSelectStyles'
@@ -11,6 +12,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL
 const NO_PROFILE_PICTURE = "/assets/defaultAvatar.png"
 
 export default function CreateStudent(data) {
+    const formRef = useRef(null);
     const { push } = useRouter();
     const { user } = useUser();
     const [input, setInput] = useState({
@@ -41,11 +43,11 @@ export default function CreateStudent(data) {
 		setInput({
 			name: "",
 			lastName: "",
-			age: null,
+			age: "",
 			gender: "",
 			profileImageUrl: "",
 			siblings: [],
-			room: null
+			room: ""
 		})
 	}
 
@@ -60,7 +62,6 @@ export default function CreateStudent(data) {
 
         const endpoint = API_URL + '/students'
         const JSONdata = JSON.stringify(dataFormatted)
-		console.log(JSONdata)
         const options = {
             method: 'POST',
             headers: {
@@ -74,7 +75,7 @@ export default function CreateStudent(data) {
 			return response.json();
         })
         .then(data => {
-            push(`/students/${data.id}`)
+            data.id ? push(`/students/${data.id}`) : push(`/students`)
         })
     }
 
@@ -102,7 +103,7 @@ export default function CreateStudent(data) {
     return (
         <div className={Styles.container}>
             <h2>CREATE NEW STUDENT</h2>
-            <form className={Styles.data}>
+            <form className={Styles.data} ref={formRef} onSubmit={(e)=>handleSubmit(e)} method="post">
                 <div className={Styles.dataInputs}>
                     <div className={Styles.selectContainer}>
                         <label htmlFor="name">Name: </label>
@@ -113,6 +114,7 @@ export default function CreateStudent(data) {
                         value={input.name}
                         onChange={handleChangeForm}
                         onBlur={handleChangeForm}
+                        required
                         />
                     </div>
                     <div className={Styles.selectContainer}>
@@ -124,6 +126,7 @@ export default function CreateStudent(data) {
                         value={input.lastName}
                         onChange={handleChangeForm}
                         onBlur={handleChangeForm}
+                        required
                         />
                     </div>
                     <div className={Styles.selectContainer}>
@@ -137,6 +140,7 @@ export default function CreateStudent(data) {
                         min="1"
                         onChange={handleChangeForm}
                         onBlur={handleChangeForm}
+                        required
                         />
                         <label htmlFor="gender">Gender: </label>
                         <select
@@ -145,6 +149,7 @@ export default function CreateStudent(data) {
                             value={input.gender}
                             onChange={handleChangeForm}
                             onBlur={handleChangeForm}
+                            required
                         >
                             <option value="male">Male</option>
                             <option value="female">Female</option>
