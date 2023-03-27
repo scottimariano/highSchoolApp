@@ -7,7 +7,7 @@
 
 .container h2{
     margin: 10px;
-    color: white;
+    color: black;
 }
 
 .data{
@@ -90,6 +90,10 @@
 
 .profilePicContainer img{
     border-radius: 50%;
+    object-fit: contain;
+    width: 125px;
+    height: 125px;
+    border: 1px solid grey;
 }
 
 .picActionButtons{
