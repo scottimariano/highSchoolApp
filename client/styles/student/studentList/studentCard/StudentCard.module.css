@@ -20,7 +20,8 @@
 .data{
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
+    padding-left: 20px;
 }
 
 .title{
@@ -28,8 +29,12 @@
     margin-left: 10px;
 }
 
-.teacher{
-    margin-left: 25px;
+.dataText{
+    width: 80%;
+}
+
+.info{
+    margin-left: 20px;
 }
 
 .attendees{

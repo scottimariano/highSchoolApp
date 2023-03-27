@@ -51,6 +51,16 @@ export default function StudentsList ({list}) {
           changeToogleSort(!toogleSort);
     }
 
+    function handleHasSiblings(){
+		const withSiblings = filteredStudents.filter(student=>{
+			return student.siblings.length > 0
+		})
+        const sorted = withSiblings.sort((a, b) => {
+			return b.siblings.length - a.siblings.length
+		});
+        setFilteredstudents(sorted);
+    }
+
 	return (
 		<div>
 			<Head>
@@ -61,10 +71,13 @@ export default function StudentsList ({list}) {
 				<input type="text" placeholder='Search student by name' value={searchInput} onChange={e=>handleSearh(e)}/>
 
 				<button onClick={()=>handleClearSearch()}>
-					CLEAR
+					Clear
 				</button>
 				<button onClick={()=>handleSort()}>
 					{toogleSort ? "A-Z" : "Z-A"} &darr;
+				</button>
+				<button onClick={()=>handleHasSiblings()}>
+					By Siblings &darr;
 				</button>
 			</div>
 			<ul className={Styles.roomList}>

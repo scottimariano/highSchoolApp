@@ -6,11 +6,11 @@ export default function StudentCard({student}) {
 	return (
 		<Link href={`/students/${student.id}`}>
 			<div className={Styles.container}>
-				<div>
+				<div className={Styles.dataText}>
 					<p className={Styles.title}>Name: <strong>{student.lastName}</strong> {student.name} </p>
 					<div className={Styles.data}>
-						<p className={Styles.teacher}>Age: {student.age}</p>
-						<p className={Styles.teacher}>Gender: {student.gender}</p>
+						<p className={Styles.info}>Age: {student.age}</p>
+						<p className={Styles.info}>Gender: {student.gender}</p>
 					</div>
 				</div>
 				<img

@@ -60,7 +60,7 @@ export default function Home ({list}) {
 				<input type="text" placeholder='Search room by name' value={searchInput} onChange={e=>handleSearh(e)}/>
 
 				<button onClick={()=>handleClearSearch()}>
-					CLEAR
+					Clear
 				</button>
 				<button onClick={()=>handleSort()}>
 					{toogleSort === true ? "A-Z" : "Z-A"} &darr;

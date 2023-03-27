@@ -31,11 +31,13 @@ function MyApp({ Component, pageProps }) {
                 width: "100vw",
                 height: "100vh"
                 }}>
-                <Image 
+                <Image
+                    rel="preload"
                     src="/assets/starsBg.jpg"
                     alt="stars sky"
-                    layout="fill"
-                    objectFit='cover'
+                    as="image"
+                    fill
+                    priority
                 />
                 </div>
                 <Component {...pageProps} />

@@ -12,15 +12,25 @@
 }
 
 .searchTag{
-    border-radius: 10px;
-    width: 350px;
     display: flex;
-    justify-content: space-around;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    width: 500px;
     height: 30px;
     margin: 10px 0 0 10px;
 }
 
+.searchTag input {
+    border-radius: 5px;
+    width: 175px;
+    border: 1px solid grey;
+}
+
 .searchTag button{
     font-size: 12px;
-    margin: 0 2px 0 2px 0;
+    margin-left: 5px;
+    background-color: white;
+    border-radius: 10px;
+    border: 1px solid grey;
+    min-width: 50px;
 }
