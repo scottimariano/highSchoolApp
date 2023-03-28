@@ -67,7 +67,7 @@ export default function StudentsList ({list}) {
 				<title> Students - RatherLab School </title>
 			</Head>
 			<div className={Styles.searchTag}>
-				<FontAwesomeIcon style={{fontSize:"25px"}} icon={faSearch}></FontAwesomeIcon>
+				<FontAwesomeIcon style={{fontSize:"25px", marginRight: "10px"}} icon={faSearch}></FontAwesomeIcon>
 				<input type="text" placeholder='Search student by name' value={searchInput} onChange={e=>handleSearh(e)}/>
 
 				<button onClick={()=>handleClearSearch()}>
@@ -80,7 +80,8 @@ export default function StudentsList ({list}) {
 					By Siblings &darr;
 				</button>
 			</div>
-			<ul className={Styles.roomList}>
+			<h2 className={Styles.title}>STUDENTS</h2>
+			<ul className={Styles.studentList}>
                 {filteredStudents.map((student) => (
 					<li key={student.id}>
 						<StudentCard student={student} />

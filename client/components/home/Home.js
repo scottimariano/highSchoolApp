@@ -66,6 +66,7 @@ export default function Home ({list}) {
 					{toogleSort === true ? "A-Z" : "Z-A"} &darr;
 				</button>
 			</div>
+			<h2 className={Styles.title}>ROOMS</h2>
 			<ul className={Styles.roomList}>
 				{filteredRooms.map((room) => (
 					<li key={room.id}>
