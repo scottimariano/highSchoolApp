@@ -1,5 +1,4 @@
 import StudentRoomCard from "./studentRoomCard/StudentRoomCard";
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import Styles from "../../../styles/room/roomDetail/RoomDetail.module.css"
@@ -9,7 +8,6 @@ import Router from 'next/router'
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
 export default function RoomDetail({room}) {
-    const { push } = useRouter();
     const [editMode, setEditMode] = useState(false);
     const [input, setInput] = useState({
         name: room.data.name,
@@ -47,9 +45,12 @@ export default function RoomDetail({room}) {
         }
         fetch(endpoint, options)
         .then(response => {
-            response.status == 200 ? alert("Room Deleted successfully") : alert("We had a problem deleteing the room, please try again")
+            response.status == 200 ? (
+                alert("Room Deleted successfully"),
+                Router.push('/')
+            ) : alert("We had a problem deleteing the room, please try again")
         })
-        push(`/`);
+
         }
     }
 
