@@ -1,6 +1,5 @@
 const Router = require('express');
-const { Sequelize } = require('sequelize');
-const { Room, Student } = require('../db');
+const { RoomService } = require('../services/RoomService');
 
 const roomController = Router();
 
@@ -12,23 +11,7 @@ roomController.get('/:id', async (req, res) => {
         return res.status(400).send('Invalid room ID');
     }
 
-    Room.findOne({
-        where: { id },
-        include: [{
-            model: Student,
-            where: { 'RoomId': id },
-            attributes: ['id', 'name', 'lastName', 'profileImageUrl'],
-            required: false
-        }],
-        attributes: {
-            include: [
-                [
-                    Sequelize.literal('(SELECT COUNT(*) FROM "Students" WHERE "Students"."RoomId" = "Room"."id")'),
-                    'attendees'
-                ]
-            ]
-        }
-    })
+    RoomService.findByPk(id)
     .then((room)=>{
         if(!room){
             return res.status(404).send('Room Not Found');
@@ -49,37 +32,7 @@ roomController.get('/', async (req, res) => {
         return res.status(400).send('Invalid name filter');
     }
 
-    Room.findAll({
-        include: [{
-            model: Student,
-            attributes: []
-        }]
-        ,
-        attributes: {
-            include: [
-                [
-                Sequelize.fn('COUNT', Sequelize.col('Students.id')),
-                'attendees'
-                ]
-            ]
-        },
-        where: {
-            [Sequelize.Op.or]: [
-                {
-                    name: {
-                        [Sequelize.Op.like]: `%${nameFilter}%`
-                    }
-                },
-                {
-                    teacher: {
-                        [Sequelize.Op.like]: `%${nameFilter}%`
-                    }
-                }
-            ]
-        },
-        group: ['Room.id'],
-        order: [['id', 'ASC']]
-    })
+    RoomService.findAll(nameFilter)
     .then((roomList)=>{
         return res.send(roomList)
     })
@@ -105,10 +58,7 @@ roomController.post('/', async (req, res) => {
         return res.status(400).send('Invalid teacher');
     }
 
-    Room.create({
-        name,
-        teacher
-    })
+    RoomService.create(name, teacher)
     .then((newRoom)=>{
         return res.status(201).json(newRoom);
     })
@@ -139,28 +89,17 @@ roomController.put('/:id', async (req, res) => {
         return res.status(400).send('Invalid teacher');
     }
 
-
-    Room.findByPk(id)
-    .then((record) => {
-        record.update(
-            {
-                name,
-                teacher
-            }
-        )
-        .then((updatedRecord)=> {
-            return res.status(200).json(updatedRecord);
-        })
-        .catch((err)=>{
-            console.error(err);
-            return res.status(500).json({ message: 'Error editing room' });
-        })
+    RoomService.update(id, name, teacher)
+    .then((updatedRecord)=> {
+        return res.status(200).json(updatedRecord);
     })
-    .catch((err) => {
+    .catch((err)=>{
         console.error(err);
-        return res.status(404).send(`We couldn't find the room with ID: ${id}`);
-    });
-
+        if(err.message == "Room Not found"){
+            return res.status(404).send(`We couldn't find the room with ID: ${id}`);
+        }
+        return res.status(500).json({ message: 'Error editing room' });
+    })
 });
 
 roomController.delete('/:id', async (req, res) => {
@@ -171,20 +110,17 @@ roomController.delete('/:id', async (req, res) => {
         return res.status(400).send('Invalid room ID');
     }
 
-	Room.findByPk(id)
-    .then((room) => {
-        room.destroy()
-        .then(() => {
-            res.send(`Room ID: ${id} was successfully deleted`);
+	RoomService.deleteRoom(id)
+    .then(() => {
+        res.send(`Room ID: ${id} was successfully deleted`);
         })
-        .catch((err) => {
-            console.error(err);
-            return res.status(500).json({ message: 'Error deleting room' });
-        })
+    .catch((err) => {
+        console.error(err);
+        if(err.message == "Room Not found"){
+            return res.status(404).send(`We couldn't find the room with ID: ${id}`);
+        }
+        return res.status(500).json({ message: 'Error deleting room' });
     })
-    .catch((e) => {
-        return res.status(404).send(`We couldn't find the room with ID: ${id}`);
-    });
 });
 
 module.exports = roomController;
