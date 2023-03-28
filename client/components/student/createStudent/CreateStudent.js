@@ -7,6 +7,7 @@ import { CldUploadButton } from 'next-cloudinary';
 import Select from 'react-select'
 import Styles from "../../../styles/student/createStudent/CreateStudent.module.css"
 import CreateButtons from "../../user/CreateButtons";
+import { validateInput } from '../../../utils/newStudentValidator';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 const NO_PROFILE_PICTURE = "/assets/defaultAvatar.png"
@@ -14,7 +15,6 @@ const NO_PROFILE_PICTURE = "/assets/defaultAvatar.png"
 export default function CreateStudent(data) {
     const formRef = useRef(null);
     const { push } = useRouter();
-    const { user } = useUser();
     const [input, setInput] = useState({
         name: "",
         lastName: "",
@@ -25,14 +25,15 @@ export default function CreateStudent(data) {
 		siblingsSelected:[],
         room: ""
     })
-
-	useEffect(()=>{
-		if (!user) {
-			push("/")
-		  }
-	})
+    const [ errors, setErrors ] = useState({hasErrors: true})
 
     function handleChangeForm(e) {
+        setErrors(
+            validateInput({
+                ...input,
+                [e.target.name]: e.target.value,
+            })
+        );
 		setInput({
 			...input,
 			[e.target.name]: e.target.value,
@@ -49,6 +50,9 @@ export default function CreateStudent(data) {
 			siblings: [],
 			room: ""
 		})
+        setErrors({
+            hasErrors: true
+        })
 	}
 
     async function handleCreate(){
@@ -106,56 +110,68 @@ export default function CreateStudent(data) {
             <form className={Styles.data} ref={formRef} onSubmit={(e)=>handleSubmit(e)} method="post">
                 <div className={Styles.dataInputs}>
                     <div className={Styles.selectContainer}>
-                        <label htmlFor="name">Name: </label>
-                        <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        value={input.name}
-                        onChange={handleChangeForm}
-                        onBlur={handleChangeForm}
-                        required
-                        />
-                    </div>
-                    <div className={Styles.selectContainer}>
-                        <label htmlFor="teacher">Last Name: </label>
-                        <input
-                        type="text"
-                        id="lastName"
-                        name="lastName"
-                        value={input.lastName}
-                        onChange={handleChangeForm}
-                        onBlur={handleChangeForm}
-                        required
-                        />
-                    </div>
-                    <div className={Styles.selectContainer}>
-                        <label htmlFor="age">Age: </label>
-                        <input
-                        className={Styles.ageInput}
-                        type="number"
-                        id="age"
-                        name="age"
-                        value={input.age}
-                        min="1"
-                        onChange={handleChangeForm}
-                        onBlur={handleChangeForm}
-                        required
-                        />
-                        <label htmlFor="gender">Gender: </label>
-                        <select
-                            id="gender"
-                            name="gender"
-                            value={input.gender}
+                        <div>
+                            <label htmlFor="name">Name: </label>
+                            <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            value={input.name}
                             onChange={handleChangeForm}
                             onBlur={handleChangeForm}
                             required
-                        >
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                        </select>
+                            />
+                            <span className={Styles.errors}>{errors.name ? errors.name : ""}</span>
+                        </div>
                     </div>
                     <div className={Styles.selectContainer}>
+                        <div>
+                            <label htmlFor="teacher">Last Name: </label>
+                            <input
+                            type="text"
+                            id="lastName"
+                            name="lastName"
+                            value={input.lastName}
+                            onChange={handleChangeForm}
+                            onBlur={handleChangeForm}
+                            required
+                            />
+                            <span className={Styles.errors}>{errors.lastName ? errors.lastName : ""}</span>
+                        </div>
+                    </div>
+                    <div className={Styles.selectContainer}>
+                        <div>
+                            <label htmlFor="age">Age: </label>
+                                <input
+                                className={Styles.ageInput}
+                                type="number"
+                                id="age"
+                                name="age"
+                                value={input.age}
+                                min="1"
+                                onChange={handleChangeForm}
+                                onBlur={handleChangeForm}
+                                required
+                                />
+                            <span className={Styles.errors}>{errors.age ? errors.age : ""}</span>
+                        </div>
+                        <div className={Styles.genderInput}>
+                            <label htmlFor="gender">Gender: </label>
+                            <select
+                                id="gender"
+                                name="gender"
+                                value={input.gender}
+                                onChange={handleChangeForm}
+                                onBlur={handleChangeForm}
+                                required
+                                >
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                            <span className={Styles.errors}>{errors.gender ? errors.gender : ""}</span>
+                            </div>
+                    </div>
+                    <div className={`${Styles.selectContainer} ${Styles.reactSelectContainer}`}>
                         <label htmlFor="siblings">Siblings: </label>
                         <Select
                             options={data.formattedStudents}
@@ -191,7 +207,7 @@ export default function CreateStudent(data) {
                 </div>
                 </form>
 
-				<CreateButtons handleCreate={handleCreate} handleReset={handleReset}/>
+				<CreateButtons handleCreate={handleCreate} handleReset={handleReset} hasErrors={errors.hasErrors}/>
         </div>
   );
 };

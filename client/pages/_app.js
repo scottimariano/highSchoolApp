@@ -6,6 +6,7 @@ import { UserProvider } from '@auth0/nextjs-auth0/client';
 import Layout from '../components/layout/Layout';
 import Head from 'next/head'
 import { Inter } from 'next/font/google'
+import Image from 'next/image'
 const inter = Inter({ subsets: ['latin'] })
 
 config.autoAddCss = false; // Tell Font Awesome to skip adding the CSS automatically since it's being imported above
@@ -24,6 +25,21 @@ function MyApp({ Component, pageProps }) {
         </Head>
         <UserProvider>
             <Layout>
+                <div style={{
+                    zIndex: -1,
+                    position: "fixed",
+                    width: "100vw",
+                    height: "100vh"
+                    }}>
+                    <Image
+                        rel="preload"
+                        src="/assets/starsBg.jpg"
+                        alt="stars sky"
+                        as="image"
+                        fill
+                        priority
+                    />
+                </div>
                 <Component {...pageProps} />
             </Layout>
         </UserProvider>

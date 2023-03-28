@@ -7,7 +7,7 @@
 
 .container h2{
     margin: 10px;
-    color: black;
+    color: white;
 }
 
 .data{
@@ -50,7 +50,10 @@
 
 .ageInput{
     width: 60px;
-    margin-right: 10px;
+}
+
+.genderInput{
+    margin-left: 30px;
 }
 
 .data select{
@@ -77,6 +80,10 @@
     align-items:center;
     min-height: 30px;
     margin-bottom: 5px;
+}
+
+.reactSelectContainer{
+    margin-bottom: 15px;
 }
 
 .profilePicContainer{
@@ -113,4 +120,15 @@
     border: 1px grey solid;
     font-size: 10px;
     cursor: pointer;
+}
+
+.errors{
+    color: red;
+    font-size: 10px;
+    margin-left: 5px;
+    display: block;
+    height: 15px;
+    line-height: 12px;
+    text-align: right;
+    padding-right: 10px;
 }

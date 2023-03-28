@@ -56,7 +56,7 @@ export default function Home ({list}) {
 				<title> Home page - RatherLab School </title>
 			</Head>
 			<div className={Styles.searchTag}>
-				<FontAwesomeIcon style={{fontSize:"25px"}} icon={faSearch}></FontAwesomeIcon>
+				<FontAwesomeIcon style={{fontSize:"25px", marginRight: "10px"}} icon={faSearch}></FontAwesomeIcon>
 				<input type="text" placeholder='Search room by name' value={searchInput} onChange={e=>handleSearh(e)}/>
 
 				<button onClick={()=>handleClearSearch()}>

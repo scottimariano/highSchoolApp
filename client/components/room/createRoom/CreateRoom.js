@@ -1,9 +1,8 @@
 import { useRouter } from 'next/navigation';
-import { useUser } from '@auth0/nextjs-auth0/client';
 import React, { useState } from 'react';
 import Styles from "../../../styles/room/createRoom/CreateRoom.module.css"
 import CreateButtons from "../../user/CreateButtons";
-
+import { validateInput } from '../../../utils/newRoomValidator';
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
 export default function CreateRoom() {
@@ -13,7 +12,16 @@ export default function CreateRoom() {
         name: '',
         teacher: ''
     })
+    
+    const [ errors, setErrors ] = useState({hasErrors: true})
+
     function handleChangeForm(e) {
+        setErrors(
+            validateInput({
+                ...input,
+                [e.target.name]: e.target.value,
+            })
+        );
 		setInput({
 			...input,
 			[e.target.name]: e.target.value,
@@ -25,7 +33,14 @@ export default function CreateRoom() {
 			name: '',
 			teacher: ''
 		})
+        setErrors({
+            hasErrors: true
+        })
 	}
+
+    function handleBlur(e){
+        handleChangeForm(e)
+    }
 
     async function handleCreate(){
         
@@ -43,7 +58,8 @@ export default function CreateRoom() {
         .then(response => {
             response.status == 201 ? alert("Room Created successfully") : alert("We had a problem creating the room, please try again")
         })
-        push('/')
+        handleReset();
+        push('/');
     }
 
     return (
@@ -58,8 +74,10 @@ export default function CreateRoom() {
                     name="name"
                     value={input.name}
                     onChange={handleChangeForm}
-				    onBlur={handleChangeForm}
+				    onBlur={handleBlur}
                     />
+                    <span className={Styles.errors}>{errors.name ? errors.name : ""}</span>
+
                 </div>
                 <div>
                     <label htmlFor="teacher">Teacher: </label>
@@ -69,12 +87,13 @@ export default function CreateRoom() {
                     name="teacher"
                     value={input.teacher}
                     onChange={handleChangeForm}
-					onBlur={handleChangeForm}
+					onBlur={handleBlur}
                     />
+                    <span className={Styles.errors}>{errors.teacher ? errors.teacher : ""}</span>
                 </div>
 
             </form>
-			<CreateButtons handleCreate={handleCreate} handleReset={handleReset}/>
+			<CreateButtons handleCreate={handleCreate} handleReset={handleReset} hasErrors={errors.hasErrors}/>
       </div>
   );
 };
