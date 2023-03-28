@@ -1,12 +1,17 @@
 const server = require('../app.js');
 const Router = require('express');
 const { Student, Room} = require('../db');
+const { Sequelize } = require('sequelize');
 
 const studentController = Router();
 
 studentController.get('/:id', async (req, res) => {
 
     const { id } = req.params;
+
+    if (isNaN(id) || parseInt(id) <= 0) {
+        return res.status(400).send('Invalid room ID');
+    }
 
     Student.findOne({
         where: { id },
@@ -27,8 +32,11 @@ studentController.get('/:id', async (req, res) => {
             }
         ]
     })
-    .then((studentList)=>{
-        return res.status(200).json(studentList);
+    .then((student)=>{
+        if(!student){
+            return res.status(404).send('Student Not Found');
+        }
+        return res.status(200).json(student);
     })
     .catch(err => {
         console.log(err);
@@ -37,6 +45,13 @@ studentController.get('/:id', async (req, res) => {
 });
 
 studentController.get('/', async (req, res) => {
+    
+    const nameFilter = req.query.name ? req.query.name : ''
+
+    if (nameFilter && !/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/.test(nameFilter)) {
+        return res.status(400).send('Invalid name filter');
+    }
+
     Student.findAll({
         include: [
             {
@@ -49,6 +64,20 @@ studentController.get('/', async (req, res) => {
                 }
             }
         ],
+        where: {
+            [Sequelize.Op.or]: [
+                {
+                    name: {
+                        [Sequelize.Op.like]: `%${nameFilter}%`
+                    }
+                },
+                {
+                    lastName: {
+                        [Sequelize.Op.like]: `%${nameFilter}%`
+                    }
+                }
+            ]
+        },
         order: [['id', 'ASC']]
     })
     .then((studentList)=>{
@@ -61,8 +90,26 @@ studentController.get('/', async (req, res) => {
 });
 
 studentController.post('/', async (req, res) => {
-    let {name, lastName, age, gender,roomId, profileImageUrl, siblingsIds} =req.body
+
+    let {name, lastName, age, gender,roomId, profileImageUrl, siblingsIds} = req.body
     
+    if (!name || !lastName || !age || !gender) {
+        return res.status(400).json({ message: 'Name, lastName, age, and gender are required fields' });
+    }
+
+    const nameRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
+    if (!nameRegex.test(name) || !nameRegex.test(lastName)) {
+        return res.status(400).json({ message: 'Name and Last Name must contain only letters' });
+    }
+
+    if (isNaN(age) || age < 2) {
+        return res.status(400).json({ message: 'Age must be a number greater than 1' });
+    }
+
+    if (gender !== 'male' && gender !== 'female') {
+        return res.status(400).json({ message: 'Gender must be male or female' });
+    }
+
     if(!profileImageUrl){
         if (gender === 'male') {
             profileImageUrl = "https://res.cloudinary.com/dmwfysfrn/image/upload/v1679594349/ratherLab/profileImages/ppn3gxsnyzjvjj0q8fof.png";
@@ -107,6 +154,28 @@ studentController.put('/:id', async (req, res) => {
 
     const { id } = req.params;
     let {name, lastName, age, gender, roomId, profileImageUrl, siblingsIds} = req.body;
+
+    if (isNaN(id) || parseInt(id) <= 0) {
+        return res.status(400).send('Invalid room ID');
+    }
+
+    if (!name && !lastName && !age && !gender && !roomId && !profileImageUrl && (!siblingsIds || siblingsIds.length === 0)) {
+        return res.status(400).json({ message: 'At least one field is required' });
+    }
+
+    const nameRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
+    if (!nameRegex.test(name) || !nameRegex.test(lastName)) {
+        return res.status(400).json({ message: 'Name and Last Name must contain only letters' });
+    }
+
+    if (isNaN(age) || age < 2) {
+        return res.status(400).json({ message: 'Age must be a number greater than 1' });
+    }
+
+    if (gender !== 'male' && gender !== 'female') {
+        return res.status(400).json({ message: 'Gender must be male or female' });
+    }
+
     Student.findByPk(id)
     .then((student) => {
         student.update(
@@ -152,6 +221,10 @@ studentController.delete('/:id', async (req, res) => {
 
 	const { id } = req.params;
 
+    if (isNaN(id) || parseInt(id) <= 0) {
+        return res.status(400).send('Invalid room ID');
+    }
+    
 	Student.findByPk(id)
     .then((student) => {
         student.destroy()

@@ -8,6 +8,10 @@ roomController.get('/:id', async (req, res) => {
 
     const { id } = req.params;
 
+    if (isNaN(id) || parseInt(id) <= 0) {
+        return res.status(400).send('Invalid room ID');
+    }
+
     Room.findOne({
         where: { id },
         include: [{
@@ -29,7 +33,7 @@ roomController.get('/:id', async (req, res) => {
         if(!room){
             return res.status(404).send('Room Not Found');
         }
-        return res.send(room)
+        return res.status(200).json(room)
     })
     .catch(err => {
         console.log(err);
@@ -40,6 +44,10 @@ roomController.get('/:id', async (req, res) => {
 roomController.get('/', async (req, res) => {
 
     const nameFilter = req.query.name ? req.query.name : ''
+
+    if (nameFilter && !/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/.test(nameFilter)) {
+        return res.status(400).send('Invalid name filter');
+    }
 
     Room.findAll({
         include: [{
@@ -56,9 +64,18 @@ roomController.get('/', async (req, res) => {
             ]
         },
         where: {
-            name: {
-                [Sequelize.Op.like]: `%${nameFilter}%`
-            }
+            [Sequelize.Op.or]: [
+                {
+                    name: {
+                        [Sequelize.Op.like]: `%${nameFilter}%`
+                    }
+                },
+                {
+                    teacher: {
+                        [Sequelize.Op.like]: `%${nameFilter}%`
+                    }
+                }
+            ]
         },
         group: ['Room.id'],
         order: [['id', 'ASC']]
@@ -75,6 +92,18 @@ roomController.get('/', async (req, res) => {
 roomController.post('/', async (req, res) => {
 
     let {name, teacher} =req.body;
+
+    if (!name || !teacher) {
+        return res.status(400).send('Name and Teacher field are required');
+    }
+    
+    if (name && !/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/.test(name)) {
+        return res.status(400).send('Invalid name');
+    }
+
+    if (teacher && !/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/.test(teacher)) {
+        return res.status(400).send('Invalid teacher');
+    }
 
     Room.create({
         name,
@@ -93,6 +122,23 @@ roomController.put('/:id', async (req, res) => {
 
     const { id } = req.params;
     let {name, teacher} = req.body;
+    
+    if (isNaN(id) || parseInt(id) <= 0) {
+        return res.status(400).send('Invalid room ID');
+    }
+
+    if (!name && !teacher) {
+        return res.status(400).send('At least one field is required (Name or Teacher)');
+    }
+    
+    if (name && !/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/.test(name)) {
+        return res.status(400).send('Invalid name');
+    }
+
+    if (teacher && !/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/.test(teacher)) {
+        return res.status(400).send('Invalid teacher');
+    }
+
 
     Room.findByPk(id)
     .then((record) => {
@@ -120,6 +166,10 @@ roomController.put('/:id', async (req, res) => {
 roomController.delete('/:id', async (req, res) => {
 
 	const { id } = req.params;
+
+    if (isNaN(id) || parseInt(id) <= 0) {
+        return res.status(400).send('Invalid room ID');
+    }
 
 	Room.findByPk(id)
     .then((room) => {
