@@ -73,14 +73,13 @@ export default function RoomDetail({room}) {
 
     async function handleEdit(roomId){
         
-        dismissed.forEach(studentId => {
-            studentDismissRequest(studentId)
-        });
+        for (const studentId of dismissed) {
+            await studentDismissRequest(studentId);
+        }
 
         const endpoint = API_URL + '/rooms/' + roomId
         let data = input;
         const JSONdata = JSON.stringify(data)
-        console.log(JSONdata)
         const options = {
             method: 'PUT',
             headers: {
@@ -90,14 +89,13 @@ export default function RoomDetail({room}) {
         }
         fetch(endpoint, options)
         .then(response => {
-            response.status == 200 ? alert("Room Updated successfully") : alert("We had a probleasdam updating the room, please try again")
+            response.status == 200 ? alert("Room Updated successfully") : alert("We had a problems updating the room, please try again")
+            Router.reload(window.location.pathname)
         })
-        Router.reload(window.location.pathname)
     }
 
     async function handleDismiss(e, id){
         e.preventDefault()
-        console.log(id)
         setDismissed([...dismissed, id])
     }
 

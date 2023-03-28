@@ -2,6 +2,7 @@ const server = require('../app.js');
 const Router = require('express');
 const { Student, Room} = require('../db');
 const { Sequelize } = require('sequelize');
+const { StudentService } = require('../services/StudentService.js');
 
 const studentController = Router();
 
@@ -13,25 +14,7 @@ studentController.get('/:id', async (req, res) => {
         return res.status(400).send('Invalid room ID');
     }
 
-    Student.findOne({
-        where: { id },
-        attributes: ['id', 'name', 'lastName', 'age', 'gender', 'profileImageUrl'],
-        include: [
-            {
-                model: Student,
-                as: 'siblings',
-                through: 'Sibling',
-                attributes: ['id', 'name', 'lastName'],
-                through: {
-                    attributes: []
-                }
-            },
-            {
-                model: Room,
-                attributes: ['id', 'name']
-            }
-        ]
-    })
+    StudentService.findByPk(id)
     .then((student)=>{
         if(!student){
             return res.status(404).send('Student Not Found');
@@ -52,34 +35,7 @@ studentController.get('/', async (req, res) => {
         return res.status(400).send('Invalid name filter');
     }
 
-    Student.findAll({
-        include: [
-            {
-                model: Student,
-                as: 'siblings',
-                through: 'Sibling',
-                attributes: ['id', 'name'],
-                through: {
-                    attributes: []
-                }
-            }
-        ],
-        where: {
-            [Sequelize.Op.or]: [
-                {
-                    name: {
-                        [Sequelize.Op.like]: `%${nameFilter}%`
-                    }
-                },
-                {
-                    lastName: {
-                        [Sequelize.Op.like]: `%${nameFilter}%`
-                    }
-                }
-            ]
-        },
-        order: [['id', 'ASC']]
-    })
+    StudentService.findAll(nameFilter)
     .then((studentList)=>{
         return res.status(200).json(studentList);
     })
@@ -91,7 +47,7 @@ studentController.get('/', async (req, res) => {
 
 studentController.post('/', async (req, res) => {
 
-    let {name, lastName, age, gender,roomId, profileImageUrl, siblingsIds} = req.body
+    let {name, lastName, age, gender, roomId, profileImageUrl, siblingsIds} = req.body
     
     if (!name || !lastName || !age || !gender) {
         return res.status(400).json({ message: 'Name, lastName, age, and gender are required fields' });
@@ -120,34 +76,24 @@ studentController.post('/', async (req, res) => {
         }
     }
 
-    Student.create({
+    const payload = {
         name,
         lastName,
         age,
         gender,
-        RoomId: roomId,
-        profileImageUrl
+        roomId,
+        profileImageUrl,
+        siblingsIds
+    }
+    StudentService.create(payload)
+    .then(newStudent=>{
+        return res.status(201).json(newStudent)
     })
-    .then(newStudent => {
-        if (siblingsIds.length > 0) {
-            siblingsIds.forEach(id => {
-                Student.findByPk(id)
-                .then(student => {
-                    newStudent.addSibling(student)
-                    student.addSibling(newStudent)
-                })
-                .catch(err => {
-                    console.error(err);
-                    return res.status(500).json({ message: 'Error associating sibling' });
-                })
-            });
-        }
-        return res.status(201).json(newStudent);
-    })
-    .catch(err => {
+    .catch((err)=>{
         console.error(err);
         return res.status(500).json({ message: 'Error creating student' });
-    })  
+    })
+
 });
 
 studentController.put('/:id', async (req, res) => {
@@ -172,47 +118,27 @@ studentController.put('/:id', async (req, res) => {
         return res.status(400).json({ message: 'Gender must be male or female' });
     }
 
-    Student.findByPk(id)
-    .then((student) => {
-        student.update(
-            {
-                name,
-                lastName,
-                age,
-                gender,
-                RoomId: roomId,
-                profileImageUrl
-            }
-        )
-        student.setSiblings([])
-        .then(res=>{
-            if (siblingsIds && siblingsIds.length > 0) {
-                siblingsIds.forEach(id => {
-                    Student.findByPk(id)
-                    .then(studentsibling => {
-                        student.addSibling(studentsibling)
-                        studentsibling.addSibling(student)
-                    })
-                    .catch(err => {
-                        console.error(err);
-                        return res.status(500).json({ message: 'Error associating sibling' });
-                    })
-                });
-            }
-        })
-        
-    })
+    const payload = {
+        name,
+        lastName,
+        age,
+        gender,
+        roomId,
+        profileImageUrl,
+        siblingsIds
+    }
+
+    StudentService.update(id, payload)
     .then(updatedStudent => {
         return res.status(200).json(updatedStudent);
     })
     .catch((err)=>{
-        console.error(err);
-        return res.status(500).json({ message: 'Error creating student' });
+        if (err.message == "Student not found"){
+            return res.status(404).json({ message: err.message })
+        }
+        return res.status(500).json({ message: err.message });
     })
-    .catch((err) => {
-        console.error(err);
-        return res.status(404).send(`We couldn't find the student with ID: ${id}`);
-    });
+
     
 })
 
@@ -225,19 +151,16 @@ studentController.delete('/:id', async (req, res) => {
         return res.status(400).send('Invalid room ID');
     }
     
-	Student.findByPk(id)
+	StudentService.deleteStudent(id)
     .then((student) => {
-        student.destroy()
-        .then(() => {
-            res.send(`Student ID: ${id} was successfully deleted`);
-        })
-        .catch((err) => {
-            console.error(err);
-            return res.status(500).json({ message: 'Error deleting student' });
-        })
+        return res.send(`Student ID: ${id} was successfully deleted`)
     })
     .catch((e) => {
-        return res.status(404).send(`We couldn't find the student with ID: ${id}`);
+        console.log(e.message)
+        if(e.message == "Student not found"){
+            return res.status(404).send(`We couldn't find the student with ID: ${id}`);
+        }
+        return res.status(500).json({ message: err.message });
     });
 })
 

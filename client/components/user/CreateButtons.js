@@ -3,7 +3,6 @@ import { faRotateLeft, faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
 import Styles from "../../styles/user/CreateButtons.module.css"
 
 export default function CreateButtons({ handleReset, handleCreate, hasErrors }) {
-  console.log(hasErrors)
   return (
     <div className={Styles.createButtons}>
         <button onClick={() => handleReset()}>

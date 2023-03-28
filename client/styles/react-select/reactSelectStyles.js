@@ -3,8 +3,8 @@ export const reactSelectStyles = {
         ...base,
         border: "1px solid grey",
         width: 375,
-        "min-heigth": 30,
-        "margin-left": 5,
+        "minHeigth": 30,
+        "marginLeft": 5,
         "backgroundColor": 'white',
         // This line disable the blue border
         boxShadow: 'none',

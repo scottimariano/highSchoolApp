@@ -30,7 +30,6 @@ export default function StudentDetail({student}) {
     const toggleEditMode = () => {
         setEditMode(!editMode);
     };
-    console.log(input)
 
     useEffect(()=>{
         setInput({
@@ -71,7 +70,7 @@ export default function StudentDetail({student}) {
 
     async function handleEdit(studentId){
         let siblingsFormatted = input.siblings.map(sibling=>sibling.value)
-        let roomId = input.room ? input.room[0].value : null
+        let roomId = input.room ? input.room.value : null
         let dataFormatted = {
             ...input,
             roomId: roomId,
@@ -87,7 +86,6 @@ export default function StudentDetail({student}) {
             },
             body: JSONdata
         }
-        console.log(dataFormatted)
         fetch(endpoint, options)
         .then(response => {
             response.status == 200 ? alert("Student Updated successfully") : alert("We had a problem updating the student, please try again")
