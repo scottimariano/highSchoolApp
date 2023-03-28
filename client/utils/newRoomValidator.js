@@ -4,7 +4,7 @@ export function validateInput(input) {
         errors.name = 'required field';
         errors.hasErrors = true;
     } else {
-        if (!/^[a-zA-Z ]+$/g.test(input.title)) {
+        if (!/^[a-zA-Z ]+$/g.test(input.name)) {
             errors.name = `Can't contains numbers or special characters`;
             errors.hasErrors = true;
         }
