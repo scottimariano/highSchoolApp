@@ -1,26 +1,10 @@
 import Link from 'next/link';
 import { useUser } from '@auth0/nextjs-auth0/client';
-import Router from 'next/router'
 import Styles from "../../../../styles/room/roomDetail/studentRoomCard/StudentRoomCard.module.css"
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL
-
 export default function StudentRoomCard({student, editMode, handleDismiss}) {
-	const { user, error, isLoading } = useUser();
+	const { user } = useUser();
 	
-	async function handleDismissRequest(id){
-		handleDismiss();
-		let bodyContent = {roomId: null}
-		const res = await fetch(`${API_URL}/students/${id}`,{
-			method : 'PUT',
-			body: JSON.stringify(bodyContent),
-			headers: {
-				'Content-Type': 'application/json',
-			}
-		})
-	  Router.reload(window.location.pathname)
-	}
-
 	return (
 		<div className={Styles.container}>
 			<Link href={`/students/${student.id}`}>
@@ -35,8 +19,8 @@ export default function StudentRoomCard({student, editMode, handleDismiss}) {
 				</div>
 			</Link>
 			{user && editMode ? 
-				<button className={Styles.dismissButton} onClick={()=>handleDismissRequest(student.id)}>
-					<span>Dismiss</span>
+				<button className={Styles.dismissButton} onClick={(e)=>handleDismiss(e, student.id)}>
+					Dismiss
 				</button>
 				: <></>}	
 		</div>

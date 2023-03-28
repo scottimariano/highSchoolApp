@@ -159,20 +159,16 @@ studentController.put('/:id', async (req, res) => {
         return res.status(400).send('Invalid room ID');
     }
 
-    if (!name && !lastName && !age && !gender && !roomId && !profileImageUrl && (!siblingsIds || siblingsIds.length === 0)) {
-        return res.status(400).json({ message: 'At least one field is required' });
-    }
-
     const nameRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
     if (!nameRegex.test(name) || !nameRegex.test(lastName)) {
         return res.status(400).json({ message: 'Name and Last Name must contain only letters' });
     }
 
-    if (isNaN(age) || age < 2) {
+    if (age && (isNaN(age) || age < 2)) {
         return res.status(400).json({ message: 'Age must be a number greater than 1' });
     }
 
-    if (gender !== 'male' && gender !== 'female') {
+    if (gender && (gender !== 'male' && gender !== 'female')) {
         return res.status(400).json({ message: 'Gender must be male or female' });
     }
 
@@ -188,14 +184,14 @@ studentController.put('/:id', async (req, res) => {
                 profileImageUrl
             }
         )
-        .then(updatedStudent => {
-            updatedStudent.setSiblings([])
+        student.setSiblings([])
+        .then(res=>{
             if (siblingsIds && siblingsIds.length > 0) {
                 siblingsIds.forEach(id => {
                     Student.findByPk(id)
-                    .then(student => {
-                        updatedStudent.addSibling(student)
-                        student.addSibling(updatedStudent)
+                    .then(studentsibling => {
+                        student.addSibling(studentsibling)
+                        studentsibling.addSibling(student)
                     })
                     .catch(err => {
                         console.error(err);
@@ -203,19 +199,23 @@ studentController.put('/:id', async (req, res) => {
                     })
                 });
             }
-            return res.status(200).json(updatedStudent);
         })
-        .catch((err)=>{
-            console.error(err);
-            return res.status(500).json({ message: 'Error creating student' });
-        })
+        
+    })
+    .then(updatedStudent => {
+        return res.status(200).json(updatedStudent);
+    })
+    .catch((err)=>{
+        console.error(err);
+        return res.status(500).json({ message: 'Error creating student' });
     })
     .catch((err) => {
         console.error(err);
         return res.status(404).send(`We couldn't find the student with ID: ${id}`);
     });
+    
+})
 
-});
 
 studentController.delete('/:id', async (req, res) => {
 

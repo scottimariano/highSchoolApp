@@ -22,13 +22,15 @@ export default function StudentDetail({student}) {
         gender: student.data.gender,
         profileImageUrl: student.data.profileImageUrl,
         siblings: student.data.siblings,
-        room: student.data.room
+        room: student.data.room,
+        roomId: student.data.roomId
     })
     const students = student.formattedStudents.filter(s=>s.value != student.data.id)
-
+    
     const toggleEditMode = () => {
-      setEditMode(!editMode);
+        setEditMode(!editMode);
     };
+    console.log(input)
 
     useEffect(()=>{
         setInput({
@@ -69,13 +71,13 @@ export default function StudentDetail({student}) {
 
     async function handleEdit(studentId){
         let siblingsFormatted = input.siblings.map(sibling=>sibling.value)
-        let roomId = input.room ? input.room.value : null
+        let roomId = input.room ? input.room[0].value : null
         let dataFormatted = {
             ...input,
             roomId: roomId,
             siblingsIds: siblingsFormatted
         }
-
+        
         const endpoint = API_URL + '/students/' + studentId
         const JSONdata = JSON.stringify(dataFormatted)
         const options = {
@@ -85,10 +87,10 @@ export default function StudentDetail({student}) {
             },
             body: JSONdata
         }
+        console.log(dataFormatted)
         fetch(endpoint, options)
         .then(response => {
             response.status == 200 ? alert("Student Updated successfully") : alert("We had a problem updating the student, please try again")
-            Router.reload(window.location.pathname)
         })
         .then(response => {
             Router.reload(window.location.pathname)
@@ -206,7 +208,7 @@ export default function StudentDetail({student}) {
                             styles={reactSelectStyles}
                             value={input.room}
                             onChange={handleRoomSelection}
-                            placeholder= {student.data.siblings.length == 0 ?
+                            placeholder= {student.data.room.length == 0 ?
                                 "No room asociated":
                                 "Choose a room to asociate"}
                             isDisabled={!editMode}

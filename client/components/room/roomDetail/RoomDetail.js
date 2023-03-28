@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import Styles from "../../../styles/room/roomDetail/RoomDetail.module.css"
 import ActionButtons from "../../user/ActionButtons";
+import Router from 'next/router'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
@@ -79,6 +80,7 @@ export default function RoomDetail({room}) {
         const endpoint = API_URL + '/rooms/' + roomId
         let data = input;
         const JSONdata = JSON.stringify(data)
+        console.log(JSONdata)
         const options = {
             method: 'PUT',
             headers: {
@@ -93,7 +95,9 @@ export default function RoomDetail({room}) {
         Router.reload(window.location.pathname)
     }
 
-    async function handleDismiss(id){
+    async function handleDismiss(e, id){
+        e.preventDefault()
+        console.log(id)
         setDismissed([...dismissed, id])
     }
 
