@@ -1,7 +1,6 @@
-import { useEffect, useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 
-import { useRouter } from 'next/navigation';
-import { useUser } from '@auth0/nextjs-auth0/client';
+import Router from 'next/router'
 import {reactSelectStyles} from '../../../styles/react-select/reactSelectStyles'
 import { CldUploadButton } from 'next-cloudinary';
 import Select from 'react-select'
@@ -14,7 +13,6 @@ const NO_PROFILE_PICTURE = "/assets/defaultAvatar.png"
 
 export default function CreateStudent(data) {
     const formRef = useRef(null);
-    const { push } = useRouter();
     const [input, setInput] = useState({
         name: "",
         lastName: "",
@@ -79,7 +77,7 @@ export default function CreateStudent(data) {
 			return response.json();
         })
         .then(data => {
-            data.id ? push(`/students/${data.id}`) : push(`/students`)
+            data.id ? Router.push(`/students/${data.id}`) : Router.push(`/students`)
         })
     }
 

@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useUser } from '@auth0/nextjs-auth0/client';
-import { useRouter } from 'next/navigation';
 import {reactSelectStyles} from '../../../styles/react-select/reactSelectStyles'
 import { CldUploadButton } from 'next-cloudinary';
 import Select from 'react-select'
@@ -12,7 +11,6 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL
 const NO_PROFILE_PICTURE = "/assets/defaultAvatar.png"
 
 export default function StudentDetail({student}) {
-    const { push } = useRouter();
     const [editMode, setEditMode] = useState(false);
     const { user } = useUser();
     const [input, setInput] = useState({
@@ -57,7 +55,7 @@ export default function StudentDetail({student}) {
         .then(response => {
             response.status == 200 ? alert("Student Deleted successfully") : alert("We had a problem deleteing the student, please try again")
         })
-        push(`/students`);
+        Router.push(`/students`)
         }
     }
 

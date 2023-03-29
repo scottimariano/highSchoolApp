@@ -3,11 +3,11 @@ import React, { useState } from 'react';
 import Styles from "../../../styles/room/createRoom/CreateRoom.module.css"
 import CreateButtons from "../../user/CreateButtons";
 import { validateInput } from '../../../utils/newRoomValidator';
+import Router from 'next/router'
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
 export default function CreateRoom() {
 
-    const { push } = useRouter();
     const [input, setInput] = useState({
         name: '',
         teacher: ''
@@ -59,7 +59,7 @@ export default function CreateRoom() {
             response.status == 201 ? alert("Room Created successfully") : alert("We had a problem creating the room, please try again")
         })
         handleReset();
-        push('/');
+        Router.push(`/`)
     }
 
     return (
