@@ -26,7 +26,8 @@ The API developed for this project was designed to be completely independent fro
 allowing for more flexibility and scalability in the future. It was built with Node.js using the 
 Express framework and connected to a PostgreSQL database through Sequelize, an ORM that facilitates 
 interaction with the database. The API provides CRUD endpoints for the Room and Student entities,
-which can be accessed through HTTP requests using standard RESTful principles.  
+which can be accessed through HTTP requests using standard RESTful principles.
+In /server/postman you could find a collection of request to test the API.  
 
 ### ROOMs Endpoints
 GET /rooms -> Get a list of all rooms.
