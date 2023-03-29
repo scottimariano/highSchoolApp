@@ -87,57 +87,41 @@ function create(payload){
 }
 
 function update(id, payload){
-    return (
-        Student.findByPk(id)
-        .then((student) => {
-            return (
-                student.update({
-                    name: payload.name,
-                    lastName: payload.lastName,
-                    age: payload.age,
-                    gender: payload.gender,
-                    RoomId: payload.roomId,
-                    profileImageUrl: payload.profileImageUrl
-                })
-                .then((updatedStudent) => {
-                    updatedStudent.setSiblings([])
-                    .then(() => {
-                        const promises = [];
-                        if (payload.siblingsIds && payload.siblingsIds.length > 0) {
-                            payload.siblingsIds.forEach(siblingId => {
-                                promises.push(
-                                    Student.findByPk(siblingId)
-                                    .then((sibling) => {
-                                        updatedStudent.addSibling(sibling);
-                                        sibling.addSibling(updatedStudent);
-                                    })
-                                    .catch((error) => {
-                                        reject(new Error('Error associating sibling'));
-                                    })
-                                )
-                            });
-                        }
-                        Promise.all(promises)
-                        .then(() => {
-                            resolve(updatedStudent);
+    let student;
+
+    return Student.findByPk(id)
+        .then((res) => {
+            student = res;
+            return student.update({
+                name: payload.name,
+                lastName: payload.lastName,
+                age: payload.age,
+                gender: payload.gender,
+                RoomId: payload.roomId,
+                profileImageUrl: payload.profileImageUrl
+            })
+        })
+        .then(()=>{
+            return student.setSiblings([]);
+        })
+        .then(() => {
+            const promises = []
+            for (const siblingId of payload.siblingsIds){
+                promises.push(
+                    Student.findByPk(siblingId)
+                        .then((sibling) => {
+                            return student.addSibling(sibling);
                         })
-                        .catch((error) => {
-                            reject(new Error('Error updating siblings'));
-                        });
-                    })
-                    .catch((error) => {
-                        reject(new Error('Error updating siblings'));
-                    });
-                })
-                .catch((error) => {
-                    throw new Error('Error updating student');
-                })
-            )
+                );
+            }
+            return Promise.all(promises);
         })
-        .catch((error) => {
-            throw new Error('Student not found');
-        })
-    )
+        .then(() => {
+            return Student.findByPk(id);
+          })
+          .catch((error) => {
+            console.error('Error al actualizar el estudiante con sus hermanos:', error);
+          });
 }
 
 function deleteStudent(id) {
