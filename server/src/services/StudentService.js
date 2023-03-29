@@ -99,38 +99,40 @@ function update(id, payload){
                     RoomId: payload.roomId,
                     profileImageUrl: payload.profileImageUrl
                 })
-            )
-            .then((updatedStudent) => {
-                updatedStudent.setSiblings([])
-                .then(() => {
-                    const promises = [];
-                    if (payload.siblingsIds && payload.siblingsIds.length > 0) {
-                        payload.siblingsIds.forEach(siblingId => {
-                            promises.push(Student.findByPk(siblingId)
-                                .then((sibling) => {
-                                    updatedStudent.addSibling(sibling);
-                                    sibling.addSibling(updatedStudent);
-                                })
-                                .catch((error) => {
-                                    reject(new Error('Error associating sibling'));
-                                }));
-                        });
-                    }
-                    Promise.all(promises)
+                .then((updatedStudent) => {
+                    updatedStudent.setSiblings([])
+                    .then(() => {
+                        const promises = [];
+                        if (payload.siblingsIds && payload.siblingsIds.length > 0) {
+                            payload.siblingsIds.forEach(siblingId => {
+                                promises.push(
+                                    Student.findByPk(siblingId)
+                                    .then((sibling) => {
+                                        updatedStudent.addSibling(sibling);
+                                        sibling.addSibling(updatedStudent);
+                                    })
+                                    .catch((error) => {
+                                        reject(new Error('Error associating sibling'));
+                                    })
+                                )
+                            });
+                        }
+                        Promise.all(promises)
                         .then(() => {
                             resolve(updatedStudent);
                         })
                         .catch((error) => {
                             reject(new Error('Error updating siblings'));
                         });
+                    })
+                    .catch((error) => {
+                        reject(new Error('Error updating siblings'));
+                    });
                 })
                 .catch((error) => {
-                    reject(new Error('Error updating siblings'));
-                });
-            })
-            .catch((error) => {
-                throw new Error('Error updating student');
-            });
+                    throw new Error('Error updating student');
+                })
+            )
         })
         .catch((error) => {
             throw new Error('Student not found');
