@@ -9,6 +9,8 @@ This is a software application for a school that allows them to create rooms/cou
 The API is deployed on Railway, and the front-end is deployed on Vercel. Both are set up for automatic deployment based on the latest version of the develop branch in the project's GitHub repository. This allows for seamless updates to the live application without manual intervention.  
 - API Deployment: https://ratherlab-production.up.railway.app/
 - FrontEnd Deployment: https://rather-lab.vercel.app/
+  (deployment test user: test@ratherlab.com.ar pass: Ratherlab1)
+
 ---
 ## Technologies Used
 
@@ -147,4 +149,6 @@ Documentation used throughout the project's development
     ```bash
     cd client
     npm run dev
+
+
 ---
