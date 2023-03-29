@@ -89,9 +89,9 @@ export default function StudentDetail({student}) {
         fetch(endpoint, options)
         .then(response => {
             response.status == 200 ? alert("Student Updated successfully") : alert("We had a problem updating the student, please try again")
+            Router.reload(`/students/${student.data.id}`)
         })
         .then(response => {
-            Router.reload(`/students/${student.data.id}`)
         })
     }
 
