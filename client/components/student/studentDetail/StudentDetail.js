@@ -91,7 +91,7 @@ export default function StudentDetail({student}) {
             response.status == 200 ? alert("Student Updated successfully") : alert("We had a problem updating the student, please try again")
         })
         .then(response => {
-            Router.reload(window.location.pathname)
+            Router.reload(`/students/${student.data.id}`)
         })
     }
 
