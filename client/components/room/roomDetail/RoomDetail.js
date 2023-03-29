@@ -91,7 +91,7 @@ export default function RoomDetail({room}) {
         fetch(endpoint, options)
         .then(response => {
             response.status == 200 ? alert("Room Updated successfully") : alert("We had a problems updating the room, please try again")
-            Router.reload(window.location.pathname)
+            Router.reload('/rooms')
         })
     }
 
