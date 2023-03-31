@@ -1,4 +1,4 @@
-# RATHER LABS - CHALLENGE 
+# Riverside High Shool
 
 This is a software application for a school that allows them to create rooms/courses and manage students. The front-end of the application is built with Next.js framework, and the back-end is built with Node.js. The application uses Postgres as the database management system.
 

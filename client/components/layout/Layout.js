@@ -13,10 +13,10 @@ export default function Layout({children}) {
                 <nav className={styles.container}>
                     <Link  href={`/`} className={styles.logo}>
                         <img 
-                            src='https://res.cloudinary.com/dmwfysfrn/image/upload/c_thumb,w_200,g_face/v1679344992/ratherLabApp/assets/Screenshot_2022-10-12_112545_1_lmwpzk.webp'/>
+                            src='https://res.cloudinary.com/dmwfysfrn/image/upload/c_thumb,w_200,g_face/v1680263256/ratherLab/assets/o3mmvcfw8u7jdd76rloo.png'/>
                         <div>
-                            <h1>RatherLab University</h1>
-                            <p>Boost your development</p>
+                            <h1>Riverside High School</h1>
+                            <p>The Pursuit of Excellence</p>
                         </div>
                     </Link>
                     <div className={styles.navSection}>
