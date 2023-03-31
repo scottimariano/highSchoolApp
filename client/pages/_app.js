@@ -21,7 +21,7 @@ function MyApp({ Component, pageProps }) {
                 font-family: ${inter.style.fontFamily};
                 }
             `}</style>
-            <link href="https://uploads-ssl.webflow.com/629ffbf53482a7f051677d6b/62b501e03eba9980c694ed0f_favicon.png" rel="shortcut icon" type="image/x-icon"/>
+            <link href="https://res.cloudinary.com/dmwfysfrn/image/upload/c_thumb,w_200,g_face/v1680263256/ratherLab/assets/o3mmvcfw8u7jdd76rloo.png" rel="shortcut icon" type="image/x-icon"/>
         </Head>
         <UserProvider>
             <Layout>
