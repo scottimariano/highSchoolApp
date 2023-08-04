@@ -53,7 +53,7 @@ export default function Home ({list}) {
 	return (
 		<div>
 			<Head>
-				<title> Home page - RatherLab School </title>
+				<title> Home page - Riverside School </title>
 			</Head>
 			<div className={Styles.searchTag}>
 				<FontAwesomeIcon style={{fontSize:"25px", marginRight: "10px"}} icon={faSearch}></FontAwesomeIcon>

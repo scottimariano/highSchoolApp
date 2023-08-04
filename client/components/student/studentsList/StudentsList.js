@@ -64,7 +64,7 @@ export default function StudentsList ({list}) {
 	return (
 		<div>
 			<Head>
-				<title> Students - RatherLab School </title>
+				<title> Students - Riverside School </title>
 			</Head>
 			<div className={Styles.searchTag}>
 				<FontAwesomeIcon style={{fontSize:"25px", marginRight: "10px"}} icon={faSearch}></FontAwesomeIcon>
