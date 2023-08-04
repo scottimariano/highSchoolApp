@@ -36,24 +36,19 @@ const sequelize = new Sequelize(DB_URL)
 const Student = StudentModel(sequelize);
 const Room = RoomModel(sequelize);
 
-// Step 1
-// Student.belongsToMany
-//     (
-//         Student, 
-//         {
-//             through: 'Sibling',
-//             as: 'siblings',
-//             foreignKey: 'studentId',
-//             otherKey: 'siblingId',
-//             timestamps: false
-//         }
-//     )
 
-// Step 2
-// Student.belongsTo(Room);
-// Room.hasMany(Student, { foreignKey: 'RoomId'});
-
-sequelize.sync();
+Room.hasMany(Student, { foreignKey: 'RoomId'});
+Student.belongsTo(Room);
+Student.belongsToMany(
+    Student,
+    {
+        through: 'Sibling',
+        as: 'siblings',
+        foreignKey: 'studentId',
+        otherKey: 'siblingId',
+        timestamps: false
+    }
+)
 
 module.exports = {
     ...sequelize.models,
