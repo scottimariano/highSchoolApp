@@ -1,6 +1,6 @@
 version: '3'
 services:
-  api:
+  riverside-api:
     build: .
     ports:
       - "5000:5000"
@@ -9,7 +9,7 @@ services:
       # Anonymous volume:
       - /app/node_modules
 
-  postgres:
+  riverside-db:
     image: postgres
     environment:
       POSTGRES_USER: postgres
